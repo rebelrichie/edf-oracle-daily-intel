@@ -210,7 +210,7 @@
             <td><span class="pill-red">{{ c.get("competitor","") }}</span></td>
             <td style="font-size:11px;">{{ c.get("agency","")[:40] }}</td>
             <td style="font-size:11px;">{{ c.get("description","")[:60] }}</td>
-            <td><span class="pill-orange">${{ "{:,.0f}".format(c.get("amount",0)|float) }}</span></td>
+            <td><span class="pill-orange">{% if c.get("amount") %}${{ "{:,.0f}".format(c.get("amount",0)|float) }}{% else %}N/A{% endif %}</span></td>
           </tr>
           {% endfor %}
         </tbody>
