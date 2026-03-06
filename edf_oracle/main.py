@@ -42,7 +42,16 @@ html = Template(open("templates/report.html").read()).render(date=datetime.now()
 with open("daily_brief.html", "w") as f: f.write(html)
 weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
 
-df = pd.DataFrame({"Opportunity Name": [f"EDF Oracle – {opp.get('title','New GEOINT')[:60]}" for opp in sam[:5]], "Amount": ["250000","500000","750000","1200000","300000"], "Close Date": [(datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")]*5, "Stage": "Pipeline", "Owner": "Hunter", "Description": ["Oracle flagged"]*5})
+# FIXED: dynamic length so it never crashes
+n = min(5, len(sam))
+df = pd.DataFrame({
+    "Opportunity Name": [f"EDF Oracle – {opp.get('title','New GEOINT')[:60]}" for opp in sam[:n]],
+    "Amount": ["250000"] * n,
+    "Close Date": [(datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")] * n,
+    "Stage": ["Pipeline"] * n,
+    "Owner": ["Hunter"] * n,
+    "Description": ["Oracle flagged – daily EO fit"] * n
+})
 df.to_csv("hubspot_import.csv", index=False)
 
 print("✅ Oracle complete")
