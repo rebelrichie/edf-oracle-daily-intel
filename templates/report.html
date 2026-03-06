@@ -95,6 +95,8 @@
   tbody td { padding: 11px 16px; font-size: 12px; line-height: 1.5; vertical-align: middle; font-weight: 400; }
 
   .pill-agency { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--muted); }
+  .pill-red    { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 4px; background: rgba(224,112,112,0.1); color: var(--red); border: 1px solid rgba(224,112,112,0.2); }
+  .pill-orange { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 4px; background: rgba(232,149,107,0.1); color: var(--orange); border: 1px solid rgba(232,149,107,0.2); }
   .pill-gold   { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 4px; background: rgba(226,196,107,0.1); color: var(--gold); border: 1px solid rgba(226,196,107,0.2); }
   a.btn { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--teal); text-decoration: none; border: 1px solid var(--teal-border); padding: 3px 9px; border-radius: 5px; }
 
@@ -191,17 +193,36 @@
   {% endif %}
 
   <!-- COMPETITIVE LANDSCAPE -->
-  {% if competitive %}
+  {% if competitor_awards or competitive %}
   <section>
     <div class="sec-hd">
       <div class="sec-hd-dot"><span class="red"></span></div>
       <div class="sec-hd-label">Competitive Landscape</div>
       <div class="sec-hd-line"></div>
     </div>
+    {% if competitor_awards %}
+    <div class="tbl-wrap" style="margin-bottom:10px;">
+      <table>
+        <thead><tr><th>Competitor</th><th>Agency</th><th>Award</th><th>Amount</th></tr></thead>
+        <tbody>
+          {% for c in competitor_awards %}
+          <tr>
+            <td><span class="pill-red">{{ c.get("competitor","") }}</span></td>
+            <td style="font-size:11px;">{{ c.get("agency","")[:40] }}</td>
+            <td style="font-size:11px;">{{ c.get("description","")[:60] }}</td>
+            <td><span class="pill-orange">${{ "{:,.0f}".format(c.get("amount",0)|float) }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    {% if competitive %}
     <div class="intel-card red-card">
-      <div class="ic-label">Competitor Moves — Planet · Maxar · BlackSky · Satellogic · Umbra</div>
+      <div class="ic-label">Oracle Analysis — What This Means for EDF</div>
       <ul>{% for c in competitive %}<li>{{ c }}</li>{% endfor %}</ul>
     </div>
+    {% endif %}
   </section>
   {% endif %}
 
