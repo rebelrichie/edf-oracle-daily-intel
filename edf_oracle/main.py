@@ -21,7 +21,9 @@ SAM_KEYWORDS = [
 
 RSS_KEYWORDS = [
     "geospatial", "satellite", "GEOINT", "NGA", "Space Force", "DoD",
-    "defense", "remote sensing", "imagery", "EO", "reconnaissance", "DIU"
+    "defense", "remote sensing", "imagery", "EO", "reconnaissance", "DIU",
+    "contract", "award", "procurement", "pentagon", "military", "intelligence",
+    "drone", "UAV", "ISR", "sensor", "orbit", "launch", "radar", "AI", "data"
 ]
 
 
@@ -88,28 +90,40 @@ def get_usaspending_awards():
 # ── RSS Feeds ─────────────────────────────────────────────────────────────────
 def get_rss():
     feeds = [
-        "https://breakingdefense.com/feed/",
-        "https://spacenews.com/feed/",
-        "https://www.defensenews.com/rss/",
-        "https://federalnewsnetwork.com/feed/",
-        "https://www.c4isrnet.com/arc/outboundfeeds/rss/"
+        ("Breaking Defense",        "https://breakingdefense.com/feed/"),
+        ("Space News",              "https://spacenews.com/feed/"),
+        ("Defense News",            "https://www.defensenews.com/rss/"),
+        ("Federal News Network",    "https://federalnewsnetwork.com/feed/"),
+        ("C4ISRNET",                "https://www.c4isrnet.com/arc/outboundfeeds/rss/"),
+        ("Defense One",             "https://www.defenseone.com/rss/all/"),
+        ("The War Zone",            "https://www.thedrive.com/the-war-zone/rss"),
+        ("Janes",                   "https://www.janes.com/feeds/news"),
+        ("Politico Defense",        "https://www.politico.com/rss/defense.xml"),
+        ("NextGov",                 "https://www.nextgov.com/rss/all/"),
+        ("GovConWire",              "https://www.govconwire.com/feed/"),
+        ("ExecutiveBiz",            "https://executivebiz.com/feed/"),
     ]
     articles = []
-    for feed in feeds:
+    for label, feed in feeds:
         try:
             d = feedparser.parse(feed)
-            for entry in d.entries[:10]:
+            hits = 0
+            for entry in d.entries[:15]:
                 text = (entry.get("title", "") + " " + entry.get("summary", "")).lower()
+                # Each source gets up to 3 articles max to ensure variety
+                if hits >= 3:
+                    break
                 if any(k.lower() in text for k in RSS_KEYWORDS):
                     articles.append({
                         "title" : entry.title,
                         "link"  : entry.link,
-                        "source": feed.split("//")[1].split("/")[0]
+                        "source": label
                     })
+                    hits += 1
         except Exception as e:
-            print(f"RSS error {feed}: {e}")
+            print(f"RSS error {label}: {e}")
 
-    return articles[:10]
+    return articles[:15]
 
 
 # ── Groq Summarizer ───────────────────────────────────────────────────────────
