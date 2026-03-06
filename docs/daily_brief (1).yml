@@ -1,8 +1,8 @@
-name: EDF BD Intel Brief — Daily
+name: EarthDaily Oracle Daily Brief
 
 on:
   schedule:
-    - cron: '0 12 * * 1-5'   # 7am ET Mon-Fri
+    - cron: '0 12 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev libcairo2 fonts-liberation
-          pip install weasyprint jinja2 requests feedparser groq
+          pip install weasyprint jinja2 requests feedparser groq pandas
 
       - name: Generate daily brief
         env:
@@ -37,10 +37,10 @@ jobs:
 
       - name: Commit docs/ to repo
         run: |
-          git config user.name  "EDF Oracle Bot"
+          git config user.name "EDF Oracle Bot"
           git config user.email "oracle@earthdailyfederal.com"
           git add docs/
-          git diff --cached --quiet || git commit -m "📊 BD Intel Brief — $(date +'%Y-%m-%d')"
+          git diff --cached --quiet || git commit -m "BD Intel Brief $(date +'%Y-%m-%d')"
           git push
 
       - name: Deploy to GitHub Pages
