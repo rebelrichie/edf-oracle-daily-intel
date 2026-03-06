@@ -53,13 +53,13 @@
 
   /* MOVES TODAY */
   .moves-grid { display: table; width: 100%; border-spacing: 10px; border-collapse: separate; }
-  .move-card { display: table-cell; width: 33%; vertical-align: top; background: rgba(124,203,195,0.07); border: 1px solid var(--teal); border-radius: 8px; padding: 14px 16px; }
+  .move-card { display: table-cell; width: 33%; vertical-align: top; background: rgba(124,203,195,0.07); border: 1px solid var(--teal); border-radius: 8px; padding: 14px 16px; height: 120px; }
   .move-num { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--teal); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; display: block; }
   .move-card p { font-size: 12px; line-height: 1.55; font-weight: 500; color: #fff; }
 
   /* TOP 3 */
   .top3 { display: table; width: 100%; border-spacing: 10px; border-collapse: separate; }
-  .t3c { display: table-cell; width: 33%; vertical-align: top; background: var(--surface); border: 1px solid var(--teal-border); border-top: 2px solid var(--teal); border-radius: 8px; padding: 16px 18px; }
+  .t3c { display: table-cell; width: 33%; vertical-align: top; background: var(--surface); border: 1px solid var(--teal-border); border-top: 2px solid var(--teal); border-radius: 8px; padding: 16px 18px; height: 140px; }
   .t3c .num { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--teal); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; display: block; }
   .t3c p { font-size: 12.5px; line-height: 1.6; font-weight: 400; }
 
@@ -208,7 +208,7 @@
           {% for c in competitor_awards %}
           <tr>
             <td><span class="pill-red">{{ c.get("competitor","") }}</span></td>
-            <td style="font-size:11px;">{{ c.get("agency","")[:40] }}</td>
+            <td style="font-size:11px;">{{ c.get("agency","Unknown Agency")[:40] }}</td>
             <td style="font-size:11px;">{{ c.get("description","")[:60] }}</td>
             <td><span class="pill-orange">{% if c.get("amount") %}${{ "{:,.0f}".format(c.get("amount",0)|float) }}{% else %}N/A{% endif %}</span></td>
           </tr>
@@ -242,6 +242,7 @@
   {% endif %}
 
   <!-- SAM.gov -->
+  {% if sam %}
   <section>
     <div class="sec-hd">
       <div class="sec-hd-dot"><span></span></div>
@@ -263,6 +264,7 @@
       </table>
     </div>
   </section>
+  {% endif %}
 
   <!-- Awards -->
   <section>
