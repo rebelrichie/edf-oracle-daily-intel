@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev libcairo2 fonts-liberation
-          pip install weasyprint jinja2 requests feedparser groq
+          pip install weasyprint jinja2 requests feedparser groq pandas
 
       - name: Generate daily brief
         env:
