@@ -27,14 +27,17 @@ def get_sam_opps():
     params = {
         'api_key': SAM_KEY,
         'limit': 30,
-        'postedFrom': (datetime.now() - timedelta(days=3)).strftime('%m/%d/%Y'),
-        'keyword': 'geospatial OR satellite OR GEOINT OR "daily revisit" OR "earth observation"'
+        'postedFrom': (datetime.now() - timedelta(days=7)).strftime('%m/%d/%Y'),  # widen to 7 days
+        'keyword': 'geospatial OR satellite OR GEOINT OR "earth observation" OR "remote sensing" OR NGA OR "Space Force"'
     }
     try:
         r = requests.get(url, params=params, timeout=15)
         data = r.json() if r.ok else {}
         opps = data.get('opportunitiesData', [])
-        return [opp for opp in opps if any(k.lower() in str(opp).lower() for k in SAM_KEYWORDS)]
+        # Filter for keyword relevance but with a broader check
+        relevant = [opp for opp in opps if any(k.lower() in str(opp).lower() for k in SAM_KEYWORDS)]
+        # If strict filter returns nothing, return everything from the search
+        return relevant if relevant else opps[:8]
     except Exception as e:
         print(f"SAM error: {e}")
         return []
@@ -182,32 +185,47 @@ with open("daily_brief.html", "w") as f:
 
 weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
 
-# HubSpot CSV
-n = min(5, len(sam))
-if n > 0:
-    rows = []
-    for opp in sam[:n]:
+# HubSpot CSV — use SAM opps if available, fall back to awards data
+rows = []
+
+if sam:
+    for opp in sam[:5]:
         title = opp.get('title') or opp.get('opportunityTitle') or 'New GEOINT Opportunity'
         agency = opp.get('fullParentPathName') or opp.get('departmentName') or 'DoD'
         sol_num = opp.get('solicitationNumber') or opp.get('noticeId') or ''
         close_raw = opp.get('responseDeadLine') or opp.get('archiveDate') or ''
-        # Parse close date if present, otherwise default to 90 days out
         try:
             close_dt = datetime.strptime(close_raw[:10], "%Y-%m-%d").strftime("%Y-%m-%d") if close_raw else (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
         except Exception:
             close_dt = (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
         rows.append({
-            "Opportunity Name": f"{title[:70]}",
+            "Opportunity Name": title[:70],
             "Amount": "250000",
             "Close Date": close_dt,
             "Stage": "Pipeline",
             "Owner": "Hunter",
             "Description": f"Oracle flagged | {agency} | Sol: {sol_num}" if sol_num else f"Oracle flagged | {agency} | Daily EO fit"
         })
+    print(f"HubSpot source: SAM ({len(rows)} opps)")
+
+elif awards:
+    # SAM returned nothing — fall back to recent awards as teaming pipeline entries
+    for a in awards[:5]:
+        rows.append({
+            "Opportunity Name": (a.get('description') or 'GEOINT Award')[:70],
+            "Amount": str(a.get('amount', '250000')),
+            "Close Date": (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d"),
+            "Stage": "Pipeline — Teaming",
+            "Owner": "Hunter",
+            "Description": f"Oracle flagged | Prime: {a.get('recipient_name','Unknown')} | {a.get('agency','')} | Sub opportunity"
+        })
+    print(f"HubSpot source: awards fallback ({len(rows)} rows — SAM returned 0)")
+
+if rows:
     df = pd.DataFrame(rows)
     df.to_csv("hubspot_import.csv", index=False)
-    print(f"✅ HubSpot CSV written — {n} opportunities")
+    print(f"✅ HubSpot CSV written — {len(rows)} rows")
 else:
-    print("⚠️  No SAM opps found — HubSpot CSV skipped")
+    print("⚠️  No data for HubSpot CSV — check SAM API key and quota")
 
 print("✅ Oracle v6 complete — BD Intel Brief generated")
