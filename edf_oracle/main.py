@@ -7,6 +7,21 @@ from datetime import datetime, timedelta
 from jinja2 import Template
 from groq import Groq
 import weasyprint
+import re
+
+# ── Markdown stripper ────────────────────────────────────────────────────────
+def strip_md(text):
+    """Remove markdown links, bold, italic from Groq output before rendering."""
+    if not isinstance(text, str):
+        return text
+    # [text](url) -> text
+    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+    # **bold** -> bold
+    text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
+    # *italic* -> italic
+    text = re.sub(r'\*([^*]+)\*', r'\1', text)
+    return text.strip()
+
 
 # ── Credentials ───────────────────────────────────────────────────────────────
 SAM_KEY  = os.getenv("SAM_API_KEY")
@@ -161,23 +176,23 @@ WHAT TO IGNORE:
 Pure IT services, cybersecurity, ground systems with no data angle, or anything where EO imagery is not the core need.
 
 YOUR JOB:
-Give Hunter something he could not get from reading the news. Be specific. Be opinionated. Name the program, the prime, the agency. Tell him exactly what to say and why EDF's daily AI-generated data is the answer. If a prime just won something, tell him which BD contact to call. If an agency has a new requirement, tell him how EDF's capability maps to it directly.
+Give Hunter something he could not get from reading the news. Be specific. Be opinionated. Name the program, the prime, the agency. Every insight should start with an imperative verb — "Reach out to...", "Monitor...", "Target...", "Flag...", "Position...", "Contact...", "Watch..." — never "Hunter should". Write like a war room briefing, not a memo.
 
 Return ONLY valid JSON. No markdown, no extra text, no code fences. Exactly this structure:
 
 {{
   "top_3": [
-    "Specific action for Hunter today — name the agency, program, or prime, explain exactly why EDF's daily AI-generated data solves their problem, and what the move is.",
-    "Second priority — same standard. No generic statements. Specific, opinionated, name names.",
-    "Third priority — same standard."
+    "MAX 2 sentences. Name the agency or prime. State the specific action and why EDF's daily AI data solves their exact problem. No URLs. No markdown.",
+    "MAX 2 sentences. Same standard — specific, opinionated, name names. No URLs. No markdown.",
+    "MAX 2 sentences. Same standard. No URLs. No markdown."
   ],
   "contacts": [
-    "Specific org, small business office email, or prime BD contact to reach today — one sentence on why they need EDF data right now based on what just happened in the news or awards.",
-    "Second contact — same standard."
+    "One sentence. Org name and why they need EDF data right now. No URLs. No markdown.",
+    "One sentence. Same standard. No URLs. No markdown."
   ],
   "dept_moves": [
-    "One budget shift, reorg, new CDO/CIO appointment, or RFI that creates a direct opening for EDF — explain the specific angle and what Hunter should do about it this week.",
-    "Second move — same standard."
+    "One sentence. Name the specific shift and what Hunter does about it this week. No URLs. No markdown.",
+    "One sentence. Same standard. No URLs. No markdown."
   ]
 }}
 
@@ -192,11 +207,10 @@ Data: {context}"""
         raw    = response.choices[0].message.content.strip()
         raw    = raw.replace("```json", "").replace("```", "").strip()
         parsed = json.loads(raw)
-        return (
-            parsed.get("top_3",      ["No data returned."]),
-            parsed.get("contacts",   []),
-            parsed.get("dept_moves", [])
-        )
+        top_3      = [strip_md(x) for x in parsed.get("top_3",      ["No data returned."])]
+        contacts   = [strip_md(x) for x in parsed.get("contacts",   [])]
+        dept_moves = [strip_md(x) for x in parsed.get("dept_moves", [])]
+        return (top_3, contacts, dept_moves)
     except Exception as e:
         print(f"Groq error: {e}")
         return (["Intel unavailable — check Groq API key or quota."], [], [])
