@@ -1,34 +1,388 @@
 <!DOCTYPE html>
-<html>
-<head><style>
-body{font-family:Arial;background:#0a1428;color:#fff;padding:40px;line-height:1.6;}
-h1{color:#7CCBC3;text-align:center;font-size:28px;}
-.top{background:#001f3f;padding:25px;border-radius:16px;border:2px solid #7CCBC3;}
-table{width:100%;border-collapse:collapse;margin:20px 0;}
-th{background:#7CCBC3;color:#000;padding:12px;}
-td{padding:10px;border-bottom:1px solid #334455;}
-a{color:#7CCBC3;}
-</style></head>
-<body>
-<h1>🌍 EarthDaily Federal • Oracle Daily Intel Brief</h1>
-<p style="text-align:center;font-size:20px;color:#7CCBC3;">{{ date }} – Powered by Groq AI • Deep Strategic Edition</p>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BD Intel Brief — EarthDaily Federal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #7CCBC3;
+    --teal-glow: rgba(124,203,195,0.12);
+    --teal-border: rgba(124,203,195,0.2);
+    --gold: #E2C46B;
+    --red: #E07070;
+    --bg: #050d1b;
+    --surface: #0a1628;
+    --surface-2: #0d1f38;
+    --text: #c8d8e8;
+    --muted: #4a6278;
+  }
 
-<div class="top">
-<h2>🚀 TOP 3 MUST-CHASE TODAY (Groq Summary)</h2>
-{% for item in top_3 %}<p><strong>{{ item }}</strong></p>{% endfor %}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    background-image: radial-gradient(ellipse 60% 30% at 50% 0%, rgba(124,203,195,0.07) 0%, transparent 70%);
+  }
+
+  /* HEADER */
+  .hdr {
+    padding: 32px 52px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--teal-border);
+  }
+
+  .hdr-left .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.75;
+  }
+
+  .hdr-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .hdr-left h1 em { font-style: normal; color: var(--teal); }
+
+  .hdr-right { text-align: right; }
+
+  .hdr-right .date {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .hdr-right .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+
+  /* BODY */
+  .body { padding: 44px 52px 64px; display: flex; flex-direction: column; gap: 52px; }
+
+  /* SECTION LABEL */
+  .sec-hd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .sec-hd::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--teal-border);
+  }
+
+  .sec-hd span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+  /* TOP 3 */
+  .top3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  .t3c {
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-top: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 22px 22px 24px;
+    transition: background 0.18s;
+  }
+
+  .t3c:hover { background: var(--teal-glow); }
+
+  .t3c .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .t3c p { font-size: 13.5px; line-height: 1.65; color: var(--text); font-weight: 300; }
+
+  /* TABLE */
+  .tbl-wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--teal-border);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    background: var(--surface-2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    padding: 13px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--teal-border);
+  }
+
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(124,203,195,0.05); }
+  tbody td { padding: 13px 18px; font-size: 13px; line-height: 1.5; vertical-align: middle; font-weight: 300; }
+
+  .pill-agency {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+  }
+
+  .pill-gold {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: rgba(226,196,107,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(226,196,107,0.2);
+  }
+
+  a.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    text-decoration: none;
+    border: 1px solid var(--teal-border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  a.btn:hover { background: var(--teal-glow); border-color: var(--teal); }
+
+  /* BUZZ */
+  .buzz { border: 1px solid var(--teal-border); border-radius: 10px; overflow: hidden; }
+
+  .bz {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 15px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .bz:last-child { border-bottom: none; }
+  .bz:hover { background: rgba(124,203,195,0.05); }
+  .bz-ind { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 7px; }
+
+  .bz-body { flex: 1; }
+
+  .bz-body a {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 300;
+    text-decoration: none;
+    line-height: 1.55;
+    transition: color 0.15s;
+  }
+
+  .bz-body a:hover { color: var(--teal); }
+
+  .bz-src {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  .ftr {
+    border-top: 1px solid var(--teal-border);
+    padding: 20px 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ftr-l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(124,203,195,0.07);
+    border: 1px solid var(--teal-border);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .live-dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--teal);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  @media(max-width:760px){
+    .hdr, .body, .ftr { padding-left: 20px; padding-right: 20px; }
+    .top3 { grid-template-columns: 1fr; }
+    .hdr { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .hdr-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="eyebrow">EarthDaily Federal · Intelligence Operations</div>
+    <h1>BD <em>Intel Brief</em></h1>
+  </div>
+  <div class="hdr-right">
+    <div class="date">{{ date }}</div>
+    <div class="sub">Powered by Groq AI · Deep Strategic Edition</div>
+  </div>
+</header>
+
+<div class="body">
+
+  <!-- TOP 3 -->
+  <section>
+    <div class="sec-hd"><div class="dot"></div><span>Top 3 Must-Chase Today</span></div>
+    <div class="top3">
+      {% for item in top_3 %}
+      <div class="t3c">
+        <span class="num">Priority 0{{ loop.index }}</span>
+        <p>{{ item }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- SAM.gov -->
+  <section>
+    <div class="sec-hd"><div class="dot"></div><span>New SAM.gov Opportunities</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Agency</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for opp in sam %}
+          <tr>
+            <td>{{ opp.get('title','') }}</td>
+            <td><span class="pill-agency">{{ opp.get('fullParentPathName','DoD') }}</span></td>
+            <td><a class="btn" href="{{ opp.get('uiLink', '') }}">Open →</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Awards -->
+  <section>
+    <div class="sec-hd"><div class="dot"></div><span>Recent Awards &amp; Teaming Spotlight</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Award</th>
+            <th>Prime</th>
+            <th>Teaming Play</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in awards %}
+          <tr>
+            <td>{{ a.get('description','')[:80] }}</td>
+            <td>{{ a.get('recipient_name','Unknown') }}</td>
+            <td><span class="pill-gold">↗ Reach out for sub — similar GEOINT work</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Buzz -->
+  <section>
+    <div class="sec-hd"><div class="dot"></div><span>Industry Buzz &amp; Competitor Moves</span></div>
+    <div class="buzz">
+      {% for a in rss %}
+      <div class="bz">
+        <div class="bz-ind"></div>
+        <div class="bz-body">
+          <a href="{{ a.link }}">{{ a.title }}</a>
+          <div class="bz-src">{{ a.source }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
 </div>
 
-<h2>New SAM.gov Opportunities</h2>
-<table><tr><th>Title</th><th>Agency</th><th>Link</th></tr>
-{% for opp in sam %}<tr><td>{{ opp.get('title','') }}</td><td>{{ opp.get('fullParentPathName','DoD') }}</td><td><a href="{{ opp.get('uiLink', '') }}">→ Open</a></td></tr>{% endfor %}</table>
+<footer class="ftr">
+  <div class="ftr-l">Oracle · Built for EarthDaily Federal · New logos start here</div>
+  <div class="live"><div class="live-dot"></div>Live Intelligence</div>
+</footer>
 
-<h2>Recent Awards & Teaming Spotlight</h2>
-<table><tr><th>Award</th><th>Prime</th><th>Teaming Play</th></tr>
-{% for a in awards %}<tr><td>{{ a.get('description','')[:80] }}</td><td>{{ a.get('recipient_name','Unknown') }}</td><td>Reach out for sub — they just won similar GEOINT work</td></tr>{% endfor %}</table>
-
-<h2>Industry Buzz & Competitor Moves</h2>
-{% for a in rss %}<p>🔥 <a href="{{ a.link }}">{{ a.title }}</a> ({{ a.source }})</p>{% endfor %}
-
-<p style="text-align:center;color:#7CCBC3;margin-top:40px;">Oracle built for EarthDaily Federal • New logos start here</p>
 </body>
 </html>
