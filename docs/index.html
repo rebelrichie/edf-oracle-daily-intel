@@ -1,0 +1,1068 @@
+name: EDF BD Intel Brief — Daily
+
+on:
+  schedule:
+    - cron: '0 12 * * 1-5'   # 7am ET Mon-Fri
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev libcairo2 fonts-liberation
+          pip install weasyprint jinja2 requests feedparser groq
+
+      - name: Generate daily brief
+        env:
+          SAM_API_KEY:  ${{ secrets.SAM_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python edf_oracle/main.py
+
+      - name: Commit docs/ to repo
+        run: |
+          git config user.name  "EDF Oracle Bot"
+          git config user.email "oracle@earthdailyfederal.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "📊 BD Intel Brief — $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false
+
+      - name: Send email with PDF
+        env:
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          SEND_TO:            ${{ secrets.SEND_TO }}
+          BRIEF_CC:           ${{ secrets.BRIEF_CC }}
+          SITE_URL:           ${{ secrets.SITE_URL }}
+        run: python send_brief.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bd-intel-brief-${{ github.run_id }}
+          path: |
+            daily_brief.pdf
+            docs/data.json
+          retention-days: 7
+
+"""
+send_brief.py — Email the daily BD Intel Brief PDF + link to live dashboard.
+"""
+import os, smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text      import MIMEText
+from email.mime.base      import MIMEBase
+from email                import encoders
+from datetime             import datetime
+
+GMAIL_USER         = os.environ["GMAIL_USER"]
+GMAIL_APP_PASSWORD = os.environ["GMAIL_APP_PASSWORD"]
+SEND_TO            = [e.strip() for e in os.environ.get("SEND_TO","").split(",") if e.strip()]
+CC_LIST            = [e.strip() for e in os.environ.get("BRIEF_CC","").split(",") if e.strip()]
+SITE_URL           = os.environ.get("SITE_URL", "")
+
+today   = datetime.now().strftime("%B %d, %Y")
+subject = f"EDF BD Intel Brief — {today}"
+
+site_line = f'<p style="margin:16px 0;"><a href="{SITE_URL}" style="color:#7CCBC3;font-family:monospace;">🌐 Open Live Dashboard →</a></p>' if SITE_URL else ""
+
+html_body = f"""
+<div style="font-family:sans-serif;background:#050d1b;color:#d8e8f4;padding:32px;border-radius:10px;max-width:600px;">
+  <div style="font-size:10px;letter-spacing:0.2em;color:#7CCBC3;text-transform:uppercase;margin-bottom:8px;">EarthDaily Federal · Intelligence Operations</div>
+  <h1 style="font-size:28px;font-weight:800;color:#fff;margin:0 0 16px;">BD Intel Brief</h1>
+  <p style="color:#6a8aaa;font-size:13px;margin-bottom:16px;">{today}</p>
+  <p style="font-size:13px;line-height:1.7;margin-bottom:20px;">Your daily BD brief is attached. Top opportunities, competitive landscape, procurement vehicles, and industry buzz — live from SAM.gov, USASpending, and defense news feeds.</p>
+  {site_line}
+  <hr style="border:none;border-top:1px solid rgba(124,203,195,0.2);margin:24px 0;">
+  <p style="font-size:10px;color:#3d5570;">Oracle · EarthDaily Federal · Automated BD Intelligence</p>
+</div>"""
+
+msg = MIMEMultipart("alternative")
+msg["Subject"] = subject
+msg["From"]    = GMAIL_USER
+msg["To"]      = ", ".join(SEND_TO)
+if CC_LIST: msg["Cc"] = ", ".join(CC_LIST)
+msg.attach(MIMEText(html_body, "html"))
+
+for path, label in [("daily_brief.pdf", f"EDF_BD_Intel_{datetime.now().strftime('%Y%m%d')}.pdf"),
+                     ("hubspot_import.csv", f"EDF_HubSpot_{datetime.now().strftime('%Y%m%d')}.csv")]:
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(f.read())
+            encoders.encode_base64(part)
+            part.add_header("Content-Disposition", f'attachment; filename="{label}"')
+            msg.attach(part)
+        print(f"✅ Attached: {path}")
+
+try:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
+        s.login(GMAIL_USER, GMAIL_APP_PASSWORD)
+        s.sendmail(GMAIL_USER, SEND_TO + CC_LIST, msg.as_string())
+    print(f"✅ Sent to: {', '.join(SEND_TO + CC_LIST)}")
+except Exception as e:
+    print(f"❌ Email error: {e}"); raise
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarthDaily Federal — BD Intel Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #7CCBC3;
+    --teal-dim: rgba(124,203,195,0.15);
+    --teal-border: rgba(124,203,195,0.2);
+    --gold: #E2C46B;
+    --gold-dim: rgba(226,196,107,0.12);
+    --red: #E07070;
+    --red-dim: rgba(224,112,112,0.12);
+    --orange: #E8956B;
+    --purple: #A78BCA;
+    --purple-dim: rgba(167,139,202,0.12);
+    --bg: #030912;
+    --surface: #080f1e;
+    --surface-2: #0d1828;
+    --surface-3: #111f33;
+    --text: #d8e8f4;
+    --muted: #3d5570;
+    --muted-2: #6a8aaa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,203,195,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,203,195,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Top glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(124,203,195,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 32px; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--teal-border);
+    background: rgba(3,9,18,0.92);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .nav-logo-mark {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--teal);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-title span { color: var(--teal); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted-2);
+    letter-spacing: 0.08em;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal-border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--teal-dim);
+  }
+
+  .live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+  .btn-download {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--teal);
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .btn-download:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    padding: 64px 0 40px;
+    border-bottom: 1px solid var(--teal-border);
+    margin-bottom: 48px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal);
+    opacity: 0.7;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em { font-style: normal; color: var(--teal); }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted-2);
+    letter-spacing: 0.05em;
+  }
+
+  .hero-stat strong {
+    color: var(--gold);
+    font-weight: 500;
+    margin-right: 6px;
+  }
+
+  /* SECTION HEADERS */
+  .sec {
+    margin-bottom: 48px;
+  }
+
+  .sec-hd {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .sec-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .sec-dot.gold   { background: var(--gold); }
+  .sec-dot.red    { background: var(--red); }
+  .sec-dot.orange { background: var(--orange); }
+  .sec-dot.purple { background: var(--purple); }
+
+  .sec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+  }
+
+  .sec-line {
+    flex: 1;
+    height: 1px;
+    background: var(--teal-border);
+  }
+
+  /* MOVES GRID */
+  .moves-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .move-card {
+    background: var(--teal-dim);
+    border: 1px solid var(--teal);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .move-card:hover { background: rgba(124,203,195,0.2); transform: translateY(-2px); }
+
+  .move-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--teal);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .move-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  /* TOP 3 */
+  .top3-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .t3-card {
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-top: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .t3-card:hover { background: var(--surface-2); transform: translateY(-2px); }
+
+  .t3-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--teal);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .t3-card p { font-size: 13px; line-height: 1.65; font-weight: 400; }
+
+  /* INTEL CARDS */
+  .intel-card {
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .intel-card:last-child { margin-bottom: 0; }
+  .intel-card.gold   { border-color: rgba(226,196,107,0.3); }
+  .intel-card.red    { border-color: rgba(224,112,112,0.3); }
+  .intel-card.orange { border-color: rgba(232,149,107,0.3); }
+  .intel-card.purple { border-color: rgba(167,139,202,0.3); }
+
+  .ic-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    margin-bottom: 14px;
+  }
+
+  .intel-card.gold   .ic-label { color: var(--gold); }
+  .intel-card.red    .ic-label { color: var(--red); }
+  .intel-card.orange .ic-label { color: var(--orange); }
+  .intel-card.purple .ic-label { color: var(--purple); }
+
+  .intel-card ul { list-style: none; }
+  .intel-card ul li {
+    font-size: 13px;
+    line-height: 1.6;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .intel-card ul li:last-child { margin-bottom: 0; }
+  .intel-card ul li::before { content: '→'; position: absolute; left: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--teal); }
+  .intel-card.gold   ul li::before { color: var(--gold); }
+  .intel-card.red    ul li::before { color: var(--red); }
+  .intel-card.orange ul li::before { color: var(--orange); }
+  .intel-card.purple ul li::before { color: var(--purple); }
+
+  /* TABLES */
+  .tbl-wrap {
+    border: 1px solid var(--teal-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    background: var(--surface-2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    padding: 12px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--teal-border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(124,203,195,0.04); }
+
+  tbody td {
+    padding: 13px 18px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    vertical-align: middle;
+    font-weight: 400;
+  }
+
+  .pill {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 2px 9px;
+    border-radius: 4px;
+  }
+
+  .pill-teal   { background: var(--teal-dim);   color: var(--teal);   border: 1px solid var(--teal-border); }
+  .pill-gold   { background: var(--gold-dim);   color: var(--gold);   border: 1px solid rgba(226,196,107,0.25); }
+  .pill-red    { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(224,112,112,0.25); }
+  .pill-orange { background: rgba(232,149,107,0.1); color: var(--orange); border: 1px solid rgba(232,149,107,0.25); }
+  .pill-muted  { background: rgba(255,255,255,0.05); color: var(--muted-2); }
+
+  a.link-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    text-decoration: none;
+    border: 1px solid var(--teal-border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  a.link-btn:hover { background: var(--teal-dim); border-color: var(--teal); }
+
+  /* BUZZ */
+  .buzz { border: 1px solid var(--teal-border); border-radius: 10px; overflow: hidden; }
+
+  .bz-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .bz-item:last-child { border-bottom: none; }
+  .bz-item:hover { background: var(--surface-2); }
+
+  .bz-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 6px; }
+
+  .bz-body a {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 400;
+    text-decoration: none;
+    line-height: 1.5;
+    display: block;
+    transition: color 0.15s;
+  }
+
+  .bz-body a:hover { color: var(--teal); }
+
+  .bz-src {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted-2);
+    margin-top: 3px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* SEARCH */
+  .search-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .search-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+  .search-input:focus { border-color: var(--teal); }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-btn:hover, .filter-btn.active { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 20px;
+  }
+
+  .loading-ring {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--teal-border);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted-2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px dashed var(--teal-border);
+    border-radius: 10px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--teal-border);
+    padding: 28px 32px;
+    margin-top: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .moves-grid, .top3-grid { grid-template-columns: 1fr; }
+    .nav-right .live-badge, .nav-right .btn-download { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">EDF</div>
+      <div class="nav-title">BD <span>Intel</span> Operations</div>
+    </div>
+    <div class="nav-right">
+      <span class="nav-date" id="nav-date">Loading...</span>
+      <div class="live-badge"><div class="live-dot"></div>Live Intel</div>
+      <a href="daily_brief.pdf" class="btn-download" download>↓ Download Brief</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- Loading state -->
+  <div id="loading" class="loading">
+    <div class="loading-ring"></div>
+    <p>Loading Intel...</p>
+  </div>
+
+  <!-- Dashboard (hidden until data loads) -->
+  <div id="dashboard" style="display:none;">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">EarthDaily Federal · Intelligence Operations</div>
+      <h1>BD <em>Intel</em> Brief</h1>
+      <div class="hero-meta">
+        <span class="hero-stat" id="stat-date"></span>
+        <span class="hero-stat"><strong id="stat-rss">—</strong> News Sources</span>
+        <span class="hero-stat"><strong id="stat-awards">—</strong> Awards Tracked</span>
+        <span class="hero-stat"><strong id="stat-competitors">—</strong> Competitor Awards</span>
+        <span class="hero-stat"><strong id="stat-sam">—</strong> SAM Opportunities</span>
+      </div>
+    </div>
+
+    <!-- YOUR MOVES TODAY -->
+    <div class="sec" id="sec-moves">
+      <div class="sec-hd">
+        <div class="sec-dot gold"></div>
+        <span class="sec-label">Your Moves Today</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="moves-grid" id="moves-grid"></div>
+    </div>
+
+    <!-- TOP 3 -->
+    <div class="sec">
+      <div class="sec-hd">
+        <div class="sec-dot"></div>
+        <span class="sec-label">Top 3 Must-Chase Today</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="top3-grid" id="top3-grid"></div>
+    </div>
+
+    <!-- INTEL DIGEST -->
+    <div class="sec" id="sec-intel">
+      <div class="sec-hd">
+        <div class="sec-dot gold"></div>
+        <span class="sec-label">Intel Digest</span>
+        <div class="sec-line"></div>
+      </div>
+      <div id="intel-contacts"></div>
+      <div id="intel-dept"></div>
+    </div>
+
+    <!-- COMPETITIVE -->
+    <div class="sec" id="sec-competitive">
+      <div class="sec-hd">
+        <div class="sec-dot red"></div>
+        <span class="sec-label">Competitive Landscape</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="tbl-wrap" id="competitive-table" style="margin-bottom:12px;"></div>
+      <div id="competitive-analysis"></div>
+    </div>
+
+    <!-- VEHICLES -->
+    <div class="sec" id="sec-vehicles">
+      <div class="sec-hd">
+        <div class="sec-dot purple"></div>
+        <span class="sec-label">Procurement Vehicles &amp; Set-Asides</span>
+        <div class="sec-line"></div>
+      </div>
+      <div id="vehicles-card"></div>
+    </div>
+
+    <!-- SAM -->
+    <div class="sec" id="sec-sam" style="display:none;">
+      <div class="sec-hd">
+        <div class="sec-dot"></div>
+        <span class="sec-label">New SAM.gov Opportunities</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="sam-search" placeholder="Filter opportunities..." oninput="filterSAM()">
+      </div>
+      <div class="tbl-wrap" id="sam-table"></div>
+    </div>
+
+    <!-- AWARDS -->
+    <div class="sec">
+      <div class="sec-hd">
+        <div class="sec-dot orange"></div>
+        <span class="sec-label">Recent Awards &amp; Teaming Spotlight</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="awards-search" placeholder="Filter awards..." oninput="filterAwards()">
+      </div>
+      <div class="tbl-wrap" id="awards-table"></div>
+    </div>
+
+    <!-- BUZZ -->
+    <div class="sec">
+      <div class="sec-hd">
+        <div class="sec-dot red"></div>
+        <span class="sec-label">Industry Buzz &amp; Competitor Moves</span>
+        <div class="sec-line"></div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="rss-search" placeholder="Filter news..." oninput="filterRSS()">
+        <button class="filter-btn active" onclick="filterRSSSource('all', this)">All</button>
+        <button class="filter-btn" onclick="filterRSSSource('Breaking Defense', this)">BD</button>
+        <button class="filter-btn" onclick="filterRSSSource('Space News', this)">Space</button>
+        <button class="filter-btn" onclick="filterRSSSource('Defense One', this)">DefOne</button>
+      </div>
+      <div class="buzz" id="buzz-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-l">Oracle · Built for EarthDaily Federal · Intelligence Operations</div>
+  <div class="live-badge"><div class="live-dot"></div>Live Intelligence</div>
+</footer>
+
+<script>
+let DATA = null;
+let allSAM = [], allAwards = [], allRSS = [];
+
+async function loadData() {
+  try {
+    const r = await fetch('data.json?t=' + Date.now());
+    DATA = await r.json();
+    renderDashboard();
+  } catch(e) {
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center;padding:60px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#E07070;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">No Data Found</div>
+        <div style="font-size:12px;color:#3d5570;">Run the brief generator first, then push docs/data.json to your repo.</div>
+      </div>`;
+  }
+}
+
+function fmt(n) {
+  if (!n) return 'N/A';
+  return '$' + parseFloat(n).toLocaleString('en-US', {maximumFractionDigits:0});
+}
+
+function renderDashboard() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  // Nav date
+  document.getElementById('nav-date').textContent = DATA.date || '';
+
+  // Hero stats
+  document.getElementById('stat-date').innerHTML = `<strong>${DATA.date}</strong>`;
+  document.getElementById('stat-rss').textContent = (DATA.rss||[]).length;
+  document.getElementById('stat-awards').textContent = (DATA.awards||[]).length;
+  document.getElementById('stat-competitors').textContent = (DATA.competitor_awards||[]).length;
+  document.getElementById('stat-sam').textContent = (DATA.sam||[]).length;
+
+  // Moves today
+  const moves = DATA.moves_today || [];
+  if (moves.length) {
+    document.getElementById('moves-grid').innerHTML = moves.map((m,i) => `
+      <div class="move-card">
+        <span class="move-num">Action 0${i+1}</span>
+        <p>${m}</p>
+      </div>`).join('');
+  } else {
+    document.getElementById('sec-moves').style.display = 'none';
+  }
+
+  // Top 3
+  document.getElementById('top3-grid').innerHTML = (DATA.top_3||[]).map((item,i) => `
+    <div class="t3-card">
+      <span class="t3-num">Priority 0${i+1}</span>
+      <p>${item}</p>
+    </div>`).join('');
+
+  // Contacts
+  if ((DATA.contacts||[]).length) {
+    document.getElementById('intel-contacts').innerHTML = `
+      <div class="intel-card gold">
+        <div class="ic-label">Potential Contacts &amp; Teaming Plays</div>
+        <ul>${DATA.contacts.map(c=>`<li>${c}</li>`).join('')}</ul>
+      </div>`;
+  }
+
+  // Dept moves
+  if ((DATA.dept_moves||[]).length) {
+    document.getElementById('intel-dept').innerHTML = `
+      <div class="intel-card">
+        <div class="ic-label">Key Departmental Moves</div>
+        <ul>${DATA.dept_moves.map(m=>`<li>${m}</li>`).join('')}</ul>
+      </div>`;
+  }
+
+  // Competitive table
+  const compAwards = DATA.competitor_awards || [];
+  if (compAwards.length) {
+    document.getElementById('competitive-table').innerHTML = `
+      <table>
+        <thead><tr><th>Competitor</th><th>Agency</th><th>Award</th><th>Amount</th></tr></thead>
+        <tbody>
+          ${compAwards.map(c=>`
+            <tr>
+              <td><span class="pill pill-red">${c.competitor||''}</span></td>
+              <td style="font-size:11px;color:var(--muted-2)">${(c.agency||'Unknown').slice(0,45)}</td>
+              <td style="font-size:11px;">${(c.description||'').slice(0,65)}</td>
+              <td><span class="pill pill-orange">${fmt(c.amount)}</span></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  if ((DATA.competitive||[]).length) {
+    document.getElementById('competitive-analysis').innerHTML = `
+      <div class="intel-card red">
+        <div class="ic-label">Oracle Analysis — What This Means for EDF</div>
+        <ul>${DATA.competitive.map(c=>`<li>${c}</li>`).join('')}</ul>
+      </div>`;
+  }
+
+  // Vehicles
+  if ((DATA.vehicles||[]).length) {
+    document.getElementById('vehicles-card').innerHTML = `
+      <div class="intel-card purple">
+        <div class="ic-label">How to Get in the Door</div>
+        <ul>${DATA.vehicles.map(v=>`<li>${v}</li>`).join('')}</ul>
+      </div>`;
+  } else {
+    document.getElementById('sec-vehicles').style.display='none';
+  }
+
+  // SAM
+  allSAM = DATA.sam || [];
+  if (allSAM.length) {
+    document.getElementById('sec-sam').style.display='block';
+    renderSAMTable(allSAM);
+  }
+
+  // Awards
+  allAwards = DATA.awards || [];
+  renderAwardsTable(allAwards);
+
+  // Buzz
+  allRSS = DATA.rss || [];
+  renderBuzz(allRSS);
+}
+
+function renderSAMTable(opps) {
+  if (!opps.length) {
+    document.getElementById('sam-table').innerHTML = '<div class="empty">No SAM opportunities today — check back tomorrow</div>';
+    return;
+  }
+  document.getElementById('sam-table').innerHTML = `
+    <table>
+      <thead><tr><th>Title</th><th>Agency</th><th>Link</th></tr></thead>
+      <tbody>
+        ${opps.map(o=>`
+          <tr>
+            <td>${o.title||''}</td>
+            <td><span class="pill pill-muted">${(o.fullParentPathName||'DoD').slice(0,40)}</span></td>
+            <td>${o.uiLink ? `<a class="link-btn" href="${o.uiLink}" target="_blank">Open →</a>` : '—'}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderAwardsTable(awards) {
+  if (!awards.length) {
+    document.getElementById('awards-table').innerHTML = '<div class="empty">No awards data</div>';
+    return;
+  }
+  document.getElementById('awards-table').innerHTML = `
+    <table>
+      <thead><tr><th>Award</th><th>Prime</th><th>Agency</th><th>Teaming Play</th></tr></thead>
+      <tbody>
+        ${awards.map(a=>`
+          <tr>
+            <td style="font-size:12px;">${(a.description||'').slice(0,70)}</td>
+            <td>${a.recipient_name||'Unknown'}</td>
+            <td><span class="pill pill-muted">${(a.agency||'').slice(0,30)}</span></td>
+            <td><span class="pill pill-gold">↗ Reach out for sub</span></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderBuzz(items) {
+  if (!items.length) {
+    document.getElementById('buzz-list').innerHTML = '<div class="empty">No news items</div>';
+    return;
+  }
+  document.getElementById('buzz-list').innerHTML = items.map(a=>`
+    <div class="bz-item" data-source="${a.source||''}">
+      <div class="bz-dot"></div>
+      <div class="bz-body">
+        <a href="${a.link||'#'}" target="_blank">${a.title||''}</a>
+        <div class="bz-src">${a.source||''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function filterSAM() {
+  const q = document.getElementById('sam-search').value.toLowerCase();
+  renderSAMTable(q ? allSAM.filter(o=>JSON.stringify(o).toLowerCase().includes(q)) : allSAM);
+}
+
+function filterAwards() {
+  const q = document.getElementById('awards-search').value.toLowerCase();
+  renderAwardsTable(q ? allAwards.filter(a=>JSON.stringify(a).toLowerCase().includes(q)) : allAwards);
+}
+
+let rssSourceFilter = 'all';
+
+function filterRSSSource(src, btn) {
+  rssSourceFilter = src;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyRSSFilter();
+}
+
+function filterRSS() { applyRSSFilter(); }
+
+function applyRSSFilter() {
+  const q = document.getElementById('rss-search').value.toLowerCase();
+  let items = allRSS;
+  if (rssSourceFilter !== 'all') items = items.filter(a=>a.source===rssSourceFilter);
+  if (q) items = items.filter(a=>(a.title+a.source).toLowerCase().includes(q));
+  renderBuzz(items);
+}
+
+loadData();
+</script>
+</body>
+</html>
