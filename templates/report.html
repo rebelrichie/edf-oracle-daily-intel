@@ -82,17 +82,28 @@
   .body > section:last-child { margin-bottom: 0; }
 
   .sec-hd {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: table;
+    width: 100%;
     margin-bottom: 18px;
   }
-
+  .sec-hd .dot, .sec-hd .dot-gold, .sec-hd .dot-red {
+    display: table-cell;
+    width: 5px;
+    vertical-align: middle;
+    padding-right: 10px;
+  }
+  .sec-hd span {
+    display: table-cell;
+    white-space: nowrap;
+    padding-right: 10px;
+    vertical-align: middle;
+  }
   .sec-hd::after {
     content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--teal-border);
+    display: table-cell;
+    width: 100%;
+    border-bottom: 1px solid var(--teal-border);
+    vertical-align: middle;
   }
 
   .sec-hd span {
@@ -102,7 +113,6 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--muted);
-    white-space: nowrap;
   }
 
   .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
@@ -252,18 +262,18 @@
   .buzz { border: 1px solid var(--teal-border); border-radius: 10px; overflow: hidden; }
 
   .bz {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    display: table;
+    width: 100%;
     padding: 15px 18px;
     background: var(--surface);
     border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: background 0.15s;
   }
+  .bz-ind { display: table-cell; width: 14px; vertical-align: top; padding-top: 5px; }
+  .bz-body { display: table-cell; vertical-align: top; }
 
   .bz:last-child { border-bottom: none; }
   .bz:hover { background: rgba(124,203,195,0.05); }
-  .bz-ind { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 7px; }
+  .bz-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); display: inline-block; margin-top: 2px; }
 
   .bz-body a {
     font-size: 13px;
@@ -288,10 +298,11 @@
   .ftr {
     border-top: 1px solid var(--teal-border);
     padding: 20px 52px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: table;
+    width: 100%;
   }
+  .ftr-l { display: table-cell; vertical-align: middle; }
+  .ftr-r { display: table-cell; vertical-align: middle; text-align: right; }
 
   .ftr-l {
     font-family: 'IBM Plex Mono', monospace;
@@ -426,7 +437,7 @@
     <div class="buzz">
       {% for a in rss %}
       <div class="bz">
-        <div class="bz-ind"></div>
+        <div class="bz-ind"><div class="bz-dot"></div></div>
         <div class="bz-body">
           <a href="{{ a.link }}">{{ a.title }}</a>
           <div class="bz-src">{{ a.source }}</div>
@@ -440,7 +451,7 @@
 
 <footer class="ftr">
   <div class="ftr-l">Oracle · Built for EarthDaily Federal · New logos start here</div>
-  <div class="live"><div class="live-dot"></div>Live Intelligence</div>
+  <div class="ftr-r"><div class="live"><div class="live-dot"></div>Live Intelligence</div></div>
 </footer>
 
 </body>
