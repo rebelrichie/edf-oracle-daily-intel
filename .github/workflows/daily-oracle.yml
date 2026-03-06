@@ -1,27 +1,69 @@
 name: EarthDaily Oracle Daily Brief
+
 on:
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '0 12 * * 1-5'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
-  report:
+  generate-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: python edf_oracle/main.py
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev libcairo2 fonts-liberation
+          pip install weasyprint jinja2 requests feedparser groq
+
+      - name: Generate daily brief
         env:
-          SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
+          SAM_API_KEY:  ${{ secrets.SAM_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      - uses: actions/upload-artifact@v4
+        run: python edf_oracle/main.py
+
+      - name: Commit docs/ to repo
+        run: |
+          git config user.name "EDF Oracle Bot"
+          git config user.email "oracle@earthdailyfederal.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "BD Intel Brief $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: oracle-brief
-          path: daily_brief.pdf
-      - uses: actions/upload-artifact@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false
+
+      - name: Send email with PDF
+        env:
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          SEND_TO:            ${{ secrets.SEND_TO }}
+          BRIEF_CC:           ${{ secrets.BRIEF_CC }}
+          SITE_URL:           ${{ secrets.SITE_URL }}
+        run: python send_brief.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: hubspot-csv
-          path: hubspot_import.csv
+          name: bd-intel-brief-${{ github.run_id }}
+          path: |
+            daily_brief.pdf
+            docs/data.json
+          retention-days: 7
