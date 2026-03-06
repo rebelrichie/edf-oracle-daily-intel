@@ -19,8 +19,14 @@ def get_sam_opps():
 def get_usaspending_awards():
     url = "https://api.usaspending.gov/api/v2/awards/"
     payload = {"filters": {"time_period": [{"start_date": (datetime.now()-timedelta(days=30)).strftime("%Y-%m-%d")}], "keyword": "geospatial OR GEOINT OR satellite OR EO"}}
-    r = requests.post(url, json=payload)
-    return r.json().get("results", [])[:5]
+    headers = {'Content-Type': 'application/json', 'User-Agent': 'EarthDaily-Oracle'}
+    try:
+        r = requests.post(url, json=payload, headers=headers, timeout=10)
+        if r.ok:
+            return r.json().get("results", [])[:5]
+    except:
+        pass
+    return []  # safe fallback - never crashes
 
 def get_rss():
     feeds = ["https://breakingdefense.com/feed/", "https://spacenews.com/feed/", "https://www.defensenews.com/rss/"]
