@@ -241,6 +241,32 @@
   </section>
   {% endif %}
 
+  <!-- Sources Sought & Pre-Solicitations -->
+  {% if sources_sought %}
+  <section>
+    <div class="sec-hd">
+      <div class="sec-hd-dot"><span class="gold"></span></div>
+      <div class="sec-hd-label">Sources Sought &amp; Pre-Solicitations</div>
+      <div class="sec-hd-line"></div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Opportunity</th><th>Agency</th><th>Type</th><th>Response Due</th></tr></thead>
+        <tbody>
+          {% for s in sources_sought %}
+          <tr>
+            <td>{{ s.get("title","")[:70] }}</td>
+            <td><span class="pill-agency">{{ s.get("agency","")[:35] }}</span></td>
+            <td><span class="pill-gold">{{ s.get("notice_type","") }}</span></td>
+            <td style="font-size:11px;">{{ s.get("response_due","TBD")[:10] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
   <!-- SAM.gov -->
   {% if sam %}
   <section>
