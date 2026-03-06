@@ -21,17 +21,13 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  @page { margin: 0.4in 0.5in; size: letter; }
+
   body {
     font-family: 'IBM Plex Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
-    background-image: radial-gradient(ellipse 60% 30% at 50% 0%, rgba(124,203,195,0.07) 0%, transparent 70%);
-  }
-
-  @media print {
-    body { background-image: none; }
-    .hdr { page-break-after: avoid; break-after: avoid; }
-    .body > section { page-break-inside: avoid; break-inside: avoid; }
+    /* background-image removed from body — WeasyPrint renders it as full-page canvas causing blank page 1 */
   }
 
   .hdr {
