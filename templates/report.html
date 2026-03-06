@@ -11,7 +11,7 @@ a{color:#7CCBC3;}
 </style></head>
 <body>
 <h1>🌍 EarthDaily Federal • Oracle Daily Intel Brief</h1>
-<p style="text-align:center;font-size:20px;color:#7CCBC3;">{{ date }} – Powered by Groq AI</p>
+<p style="text-align:center;font-size:20px;color:#7CCBC3;">{{ date }} – Powered by Groq AI • Deep Strategic Edition</p>
 
 <div class="top">
 <h2>🚀 TOP 3 MUST-CHASE TODAY (Groq Summary)</h2>
@@ -23,8 +23,8 @@ a{color:#7CCBC3;}
 {% for opp in sam %}<tr><td>{{ opp.get('title','') }}</td><td>{{ opp.get('fullParentPathName','DoD') }}</td><td><a href="{{ opp.get('uiLink', '') }}">→ Open</a></td></tr>{% endfor %}</table>
 
 <h2>Recent Awards & Teaming Spotlight</h2>
-<table><tr><th>Award</th><th>Agency</th><th>Teaming Play</th></tr>
-{% for a in awards %}<tr><td>{{ a.get('description','')[:80] }}</td><td>DoD</td><td>Prime: {{ a.get('recipient_name','') }} — reach out for sub</td></tr>{% endfor %}</table>
+<table><tr><th>Award</th><th>Prime</th><th>Teaming Play</th></tr>
+{% for a in awards %}<tr><td>{{ a.get('description','')[:80] }}</td><td>{{ a.get('recipient_name','Unknown') }}</td><td>Reach out for sub — they just won similar GEOINT work</td></tr>{% endfor %}</table>
 
 <h2>Industry Buzz & Competitor Moves</h2>
 {% for a in rss %}<p>🔥 <a href="{{ a.link }}">{{ a.title }}</a> ({{ a.source }})</p>{% endfor %}
