@@ -30,7 +30,7 @@ def groq_summarize(sam, rss):
     client = Groq(api_key=GROQ_KEY)
     context = f"SAM opps: {len(sam)}\nRSS: {[a['title'] for a in rss]}"
     prompt = "You are the EarthDaily Oracle. Create exactly 3 bullet points for 'Top 3 Must-Chase Today'. For each: why it matters for daily 5m EO + one draft outreach sentence. Keep it short."
-    response = client.chat.completions.create(model="llama3-8b-8192", messages=[{"role": "user", "content": prompt + "\nData: " + context}], temperature=0.7)
+       response = client.chat.completions.create(model="llama-3.1-8b-instant", messages=[{"role": "user", "content": prompt + "\nData: " + context}], temperature=0.7)
     return response.choices[0].message.content.split("\n")
 
 sam = get_sam_opps()
