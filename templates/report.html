@@ -28,7 +28,12 @@
     background-image: radial-gradient(ellipse 60% 30% at 50% 0%, rgba(124,203,195,0.07) 0%, transparent 70%);
   }
 
-  /* HEADER */
+  @media print {
+    body { background-image: none; }
+    .hdr { page-break-after: avoid; break-after: avoid; }
+    .body > section { page-break-inside: avoid; break-inside: avoid; }
+  }
+
   .hdr {
     padding: 32px 52px 28px;
     display: flex;
@@ -76,10 +81,8 @@
     text-transform: uppercase;
   }
 
-  /* BODY */
   .body { padding: 44px 52px 64px; display: flex; flex-direction: column; gap: 52px; }
 
-  /* SECTION LABEL */
   .sec-hd {
     display: flex;
     align-items: center;
@@ -105,6 +108,8 @@
   }
 
   .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+  .dot-gold { background: var(--gold); }
+  .dot-red { background: var(--red); }
 
   /* TOP 3 */
   .top3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -130,7 +135,49 @@
     display: block;
   }
 
-  .t3c p { font-size: 13.5px; line-height: 1.65; color: var(--text); font-weight: 300; }
+  .t3c p { font-size: 13.5px; line-height: 1.65; font-weight: 300; }
+
+  /* TWO-COL GRID */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+
+  .info-card .ic-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .info-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .info-card ul li {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.55;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .info-card ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+
+  .info-card.gold-card { border-color: rgba(226,196,107,0.25); }
+  .info-card.gold-card .ic-label { color: var(--gold); opacity: 0.7; }
+  .info-card.gold-card ul li::before { color: var(--gold); }
 
   /* TABLE */
   .tbl-wrap {
@@ -163,7 +210,6 @@
     display: inline-block;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9.5px;
-    letter-spacing: 0.06em;
     padding: 3px 9px;
     border-radius: 4px;
     background: rgba(255,255,255,0.05);
@@ -174,7 +220,6 @@
     display: inline-block;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9.5px;
-    letter-spacing: 0.06em;
     padding: 3px 9px;
     border-radius: 4px;
     background: rgba(226,196,107,0.1);
@@ -193,7 +238,7 @@
     border: 1px solid var(--teal-border);
     padding: 4px 10px;
     border-radius: 6px;
-    transition: background 0.15s, border-color 0.15s;
+    transition: background 0.15s;
   }
 
   a.btn:hover { background: var(--teal-glow); border-color: var(--teal); }
@@ -215,8 +260,6 @@
   .bz:hover { background: rgba(124,203,195,0.05); }
   .bz-ind { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 7px; }
 
-  .bz-body { flex: 1; }
-
   .bz-body a {
     font-size: 13px;
     color: var(--text);
@@ -237,7 +280,6 @@
     text-transform: uppercase;
   }
 
-  /* FOOTER */
   .ftr {
     border-top: 1px solid var(--teal-border);
     padding: 20px 52px;
@@ -250,7 +292,6 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     color: var(--muted);
-    letter-spacing: 0.08em;
   }
 
   .live {
@@ -268,16 +309,12 @@
     border-radius: 20px;
   }
 
-  .live-dot {
-    width: 5px; height: 5px; border-radius: 50%; background: var(--teal);
-    animation: blink 2s ease-in-out infinite;
-  }
-
+  .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); animation: blink 2s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
   @media(max-width:760px){
     .hdr, .body, .ftr { padding-left: 20px; padding-right: 20px; }
-    .top3 { grid-template-columns: 1fr; }
+    .top3, .two-col { grid-template-columns: 1fr; }
     .hdr { flex-direction: column; align-items: flex-start; gap: 16px; }
     .hdr-right { text-align: left; }
   }
@@ -311,17 +348,38 @@
     </div>
   </section>
 
+  <!-- CONTACTS + DEPT MOVES -->
+  {% if contacts or dept_moves %}
+  <section>
+    <div class="sec-hd"><div class="dot dot-gold"></div><span>Intel Digest</span></div>
+    <div class="two-col">
+      {% if contacts %}
+      <div class="info-card gold-card">
+        <div class="ic-label">Potential Contacts &amp; Teaming Plays</div>
+        <ul>
+          {% for c in contacts %}<li>{{ c }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if dept_moves %}
+      <div class="info-card">
+        <div class="ic-label">Key Departmental Moves</div>
+        <ul>
+          {% for m in dept_moves %}<li>{{ m }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
   <!-- SAM.gov -->
   <section>
     <div class="sec-hd"><div class="dot"></div><span>New SAM.gov Opportunities</span></div>
     <div class="tbl-wrap">
       <table>
         <thead>
-          <tr>
-            <th>Title</th>
-            <th>Agency</th>
-            <th>Link</th>
-          </tr>
+          <tr><th>Title</th><th>Agency</th><th>Link</th></tr>
         </thead>
         <tbody>
           {% for opp in sam %}
@@ -342,11 +400,7 @@
     <div class="tbl-wrap">
       <table>
         <thead>
-          <tr>
-            <th>Award</th>
-            <th>Prime</th>
-            <th>Teaming Play</th>
-          </tr>
+          <tr><th>Award</th><th>Prime</th><th>Teaming Play</th></tr>
         </thead>
         <tbody>
           {% for a in awards %}
@@ -363,7 +417,7 @@
 
   <!-- Buzz -->
   <section>
-    <div class="sec-hd"><div class="dot"></div><span>Industry Buzz &amp; Competitor Moves</span></div>
+    <div class="sec-hd"><div class="dot dot-red"></div><span>Industry Buzz &amp; Competitor Moves</span></div>
     <div class="buzz">
       {% for a in rss %}
       <div class="bz">
