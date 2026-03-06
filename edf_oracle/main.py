@@ -44,24 +44,50 @@ RSS_KEYWORDS = [
 
 # ── SAM.gov Opportunities ─────────────────────────────────────────────────────
 def get_sam_opps():
-    url    = "https://api.sam.gov/opportunities/v2/search"
-    params = {
-        "api_key"    : SAM_KEY,
-        "limit"      : 30,
-        "postedFrom" : (datetime.now() - timedelta(days=7)).strftime("%m/%d/%Y"),
-        "keyword"    : 'geospatial OR satellite OR GEOINT OR "earth observation" OR "remote sensing" OR NGA OR "Space Force"'
-    }
-    try:
-        r    = requests.get(url, params=params, timeout=15)
-        data = r.json() if r.ok else {}
-        opps = data.get("opportunitiesData", [])
+    url = "https://api.sam.gov/opportunities/v2/search"
+    # Try progressively broader searches until we get results
+    keyword_passes = [
+        'geospatial OR GEOINT OR "earth observation" OR "remote sensing"',
+        'satellite OR imagery OR NGA OR "Space Force" OR surveillance',
+        'AI OR "machine learning" OR "change detection" OR "persistent monitoring"',
+        'defense OR intelligence OR DoD OR Army OR Navy OR "Air Force"',
+    ]
+    all_opps = []
+    for keywords in keyword_passes:
+        params = {
+            "api_key"    : SAM_KEY,
+            "limit"      : 20,
+            "postedFrom" : (datetime.now() - timedelta(days=14)).strftime("%m/%d/%Y"),
+            "keyword"    : keywords
+        }
+        try:
+            r = requests.get(url, params=params, timeout=15)
+            print(f"SAM status: {r.status_code} | keywords: {keywords[:40]}")
+            if r.ok:
+                data = r.json()
+                opps = data.get("opportunitiesData", [])
+                print(f"  → {len(opps)} results")
+                all_opps.extend(opps)
+                if len(all_opps) >= 8:
+                    break
+            else:
+                print(f"  → Error body: {r.text[:200]}")
+        except Exception as e:
+            print(f"SAM error: {e}")
 
-        relevant = [o for o in opps if any(k.lower() in str(o).lower() for k in SAM_KEYWORDS)]
-        return relevant if relevant else opps[:8]
+    # Deduplicate by noticeId
+    seen = set()
+    unique = []
+    for o in all_opps:
+        nid = o.get("noticeId") or o.get("solicitationNumber") or str(o.get("title",""))
+        if nid not in seen:
+            seen.add(nid)
+            unique.append(o)
 
-    except Exception as e:
-        print(f"SAM error: {e}")
-        return []
+    relevant = [o for o in unique if any(k.lower() in str(o).lower() for k in SAM_KEYWORDS)]
+    result = relevant if relevant else unique[:8]
+    print(f"SAM final: {len(result)} opportunities")
+    return result
 
 
 # ── USASpending Awards ────────────────────────────────────────────────────────
@@ -101,6 +127,58 @@ def get_usaspending_awards():
 
     return []
 
+
+
+
+# ── Competitor Awards (USASpending) ───────────────────────────────────────────
+def get_competitor_awards():
+    """Pull recent contract awards to EDF's direct competitors from USASpending."""
+    competitors = [
+        "Planet Labs", "Planet Federal", "Maxar", "BlackSky",
+        "Satellogic", "Umbra", "Capella Space", "HawkEye 360",
+        "Palantir", "Esri", "Leica Geosystems"
+    ]
+    url = "https://api.usaspending.gov/api/v2/search/spending_by_award/"
+    results = []
+
+    for comp in competitors[:6]:  # limit API calls
+        payload = {
+            "filters": {
+                "time_period": [{
+                    "start_date": (datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d"),
+                    "end_date"  : datetime.now().strftime("%Y-%m-%d")
+                }],
+                "award_type_codes": ["A", "B", "C", "D"],
+                "recipient_search_text": [comp]
+            },
+            "fields": ["Award ID", "Recipient Name", "Award Amount", "Description",
+                       "Awarding Agency Name", "Period of Performance Start Date"],
+            "sort" : "Award Amount",
+            "order": "desc",
+            "limit": 3,
+            "page" : 1
+        }
+        headers = {"Content-Type": "application/json", "User-Agent": "EarthDaily-Oracle"}
+        try:
+            r = requests.post(url, json=payload, headers=headers, timeout=12)
+            if r.ok:
+                for item in r.json().get("results", []):
+                    amt = item.get("Award Amount", 0) or 0
+                    if float(amt) > 50000:  # filter out tiny mods
+                        results.append({
+                            "competitor"  : comp,
+                            "description" : (item.get("Description") or "")[:100],
+                            "amount"      : amt,
+                            "agency"      : item.get("Awarding Agency Name", ""),
+                            "date"        : item.get("Period of Performance Start Date", "")
+                        })
+        except Exception as e:
+            print(f"Competitor awards error ({comp}): {e}")
+
+    # Sort by amount desc, return top 6
+    results.sort(key=lambda x: float(x.get("amount") or 0), reverse=True)
+    print(f"Competitor awards: {len(results)} found")
+    return results[:6]
 
 # ── RSS Feeds ─────────────────────────────────────────────────────────────────
 def get_rss():
@@ -142,13 +220,23 @@ def get_rss():
 
 
 # ── Groq Summarizer ───────────────────────────────────────────────────────────
-def groq_summarize(sam, rss, awards):
+def groq_summarize(sam, rss, awards, competitor_awards):
     client  = Groq(api_key=GROQ_KEY)
     context = json.dumps({
-        "sam_count"      : len(sam),
-        "sam_titles"     : [o.get("title", "") for o in sam[:5]],
-        "awards"         : [{"recipient": a.get("recipient_name"), "desc": a.get("description", "")[:80]} for a in awards[:5]],
-        "news_headlines" : [a["title"] for a in rss[:8]]
+        "sam_count"        : len(sam),
+        "sam_titles"       : [o.get("title", "") for o in sam[:5]],
+        "awards"           : [{"recipient": a.get("recipient_name"), "desc": a.get("description", "")[:80]} for a in awards[:5]],
+        "news_headlines"   : [a["title"] for a in rss[:8]],
+        "competitor_awards": [
+            {
+                "competitor": c.get("competitor"),
+                "agency"    : c.get("agency"),
+                "amount"    : c.get("amount"),
+                "desc"      : c.get("description","")[:80],
+                "date"      : c.get("date","")
+            }
+            for c in competitor_awards
+        ]
     })
 
     prompt = f"""You are the BD Oracle for EarthDaily Federal. You think like a senior IC-cleared business developer with 15 years selling data and platforms to the intelligence community and DoD.
@@ -240,26 +328,28 @@ Data: {context}"""
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-sam    = get_sam_opps()
-rss    = get_rss()
-awards = get_usaspending_awards()
+sam               = get_sam_opps()
+rss               = get_rss()
+awards            = get_usaspending_awards()
+competitor_awards = get_competitor_awards()
 
-moves_today, top_3, contacts, dept_moves, competitive, vehicles = groq_summarize(sam, rss, awards)
+moves_today, top_3, contacts, dept_moves, competitive, vehicles = groq_summarize(sam, rss, awards, competitor_awards)
 
-print(f"SAM: {len(sam)} opps | Awards: {len(awards)} | RSS: {len(rss)} articles")
+print(f"SAM: {len(sam)} opps | Awards: {len(awards)} | Competitors: {len(competitor_awards)} | RSS: {len(rss)} articles")
 
 # Render HTML + PDF
 html = Template(open("templates/report.html").read()).render(
-    date        = datetime.now().strftime("%B %d, %Y"),
-    moves_today = moves_today,
-    top_3       = top_3,
-    contacts    = contacts,
-    dept_moves  = dept_moves,
-    competitive = competitive,
-    vehicles    = vehicles,
-    sam         = sam[:8],
-    awards      = awards,
-    rss         = rss
+    date              = datetime.now().strftime("%B %d, %Y"),
+    moves_today       = moves_today,
+    top_3             = top_3,
+    contacts          = contacts,
+    dept_moves        = dept_moves,
+    competitive       = competitive,
+    vehicles          = vehicles,
+    sam               = sam[:8],
+    awards            = awards,
+    competitor_awards = competitor_awards,
+    rss               = rss
 )
 
 with open("daily_brief.html", "w") as f:
