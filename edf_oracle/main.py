@@ -185,15 +185,29 @@ weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
 # HubSpot CSV
 n = min(5, len(sam))
 if n > 0:
-    df = pd.DataFrame({
-        "Opportunity Name": [f"EDF Oracle – {opp.get('title','New GEOINT')[:60]}" for opp in sam[:n]],
-        "Amount": ["250000"] * n,
-        "Close Date": [(datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")] * n,
-        "Stage": ["Pipeline"] * n,
-        "Owner": ["Hunter"] * n,
-        "Description": ["Oracle flagged – daily EO fit"] * n
-    })
+    rows = []
+    for opp in sam[:n]:
+        title = opp.get('title') or opp.get('opportunityTitle') or 'New GEOINT Opportunity'
+        agency = opp.get('fullParentPathName') or opp.get('departmentName') or 'DoD'
+        sol_num = opp.get('solicitationNumber') or opp.get('noticeId') or ''
+        close_raw = opp.get('responseDeadLine') or opp.get('archiveDate') or ''
+        # Parse close date if present, otherwise default to 90 days out
+        try:
+            close_dt = datetime.strptime(close_raw[:10], "%Y-%m-%d").strftime("%Y-%m-%d") if close_raw else (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
+        except Exception:
+            close_dt = (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
+        rows.append({
+            "Opportunity Name": f"{title[:70]}",
+            "Amount": "250000",
+            "Close Date": close_dt,
+            "Stage": "Pipeline",
+            "Owner": "Hunter",
+            "Description": f"Oracle flagged | {agency} | Sol: {sol_num}" if sol_num else f"Oracle flagged | {agency} | Daily EO fit"
+        })
+    df = pd.DataFrame(rows)
     df.to_csv("hubspot_import.csv", index=False)
     print(f"✅ HubSpot CSV written — {n} opportunities")
+else:
+    print("⚠️  No SAM opps found — HubSpot CSV skipped")
 
 print("✅ Oracle v6 complete — BD Intel Brief generated")
