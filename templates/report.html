@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><style>
+body{font-family:Arial;background:#0a1428;color:#fff;padding:40px;line-height:1.6;}
+h1{color:#7CCBC3;text-align:center;font-size:28px;}
+.top{background:#001f3f;padding:25px;border-radius:16px;border:2px solid #7CCBC3;}
+table{width:100%;border-collapse:collapse;margin:20px 0;}
+th{background:#7CCBC3;color:#000;padding:12px;}
+td{padding:10px;border-bottom:1px solid #334455;}
+a{color:#7CCBC3;}
+</style></head>
+<body>
+<h1>🌍 EarthDaily Federal • Oracle Daily Intel Brief</h1>
+<p style="text-align:center;font-size:20px;color:#7CCBC3;">{{ date }} – Powered by Groq AI</p>
+
+<div class="top">
+<h2>🚀 TOP 3 MUST-CHASE TODAY (Groq Summary)</h2>
+{% for item in top_3 %}<p><strong>{{ item }}</strong></p>{% endfor %}
+</div>
+
+<h2>New SAM.gov Opportunities</h2>
+<table><tr><th>Title</th><th>Agency</th><th>Link</th></tr>
+{% for opp in sam %}<tr><td>{{ opp.get('title','') }}</td><td>{{ opp.get('fullParentPathName','DoD') }}</td><td><a href="{{ opp.get('uiLink', '') }}">→ Open in SAM.gov</a></td></tr>{% endfor %}</table>
+
+<h2>Industry Buzz</h2>
+{% for a in rss %}<p>🔥 <a href="{{ a.link }}">{{ a.title }}</a> ({{ a.source }})</p>{% endfor %}
+
+<p style="text-align:center;color:#7CCBC3;margin-top:40px;">Oracle built for EarthDaily Federal • New logos start here</p>
+</body>
+</html>
