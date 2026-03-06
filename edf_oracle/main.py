@@ -154,45 +154,65 @@ def groq_summarize(sam, rss, awards):
     prompt = f"""You are the BD Oracle for EarthDaily Federal. You think like a senior IC-cleared business developer with 15 years selling data and platforms to the intelligence community and DoD.
 
 ABOUT EARTHDAILY FEDERAL:
-EarthDaily Federal sells AI-generated, analysis-ready earth observation data. Daily global coverage, change detection, and ML-ready imagery products. Their edge: daily revisit frequency, AI-ready pipelines, and automated change detection that replaces analyst-hours. This is a DATA company, not a services company.
+EarthDaily Federal sells AI-generated, analysis-ready earth observation data. Daily global coverage, change detection, and ML-ready imagery products built on the EarthDaily constellation. Their edge: daily revisit frequency, AI-ready pipelines, and automated change detection that replaces analyst-hours. DATA company, not services.
 
-CURRENT CUSTOMERS AND TARGETS:
-- Strong Army relationships — this is their home turf
+CURRENT BASE:
+- Army is the anchor — strong existing relationships, push for expansion
 - Active with NASA, NOAA, DHS, all military branches
-- Works with Deloitte and other large primes as a data sub
-- Going both direct AND through primes depending on the vehicle
-- Hunter's job: new logos AND expand existing accounts
+- Primes: Deloitte, Leidos, Booz Allen, SAIC, Palantir — EDF subs data to them
+- Both direct contracts and prime subs in play
+- Competitors to watch: Planet Labs, Maxar, BlackSky, Satellogic, Umbra
 
-WHAT A REAL OPPORTUNITY LOOKS LIKE:
-- Army programs needing persistent monitoring, change detection, or daily EO — EDF has the relationship, push harder
-- NASA/NOAA environmental monitoring, disaster response, climate programs — EDF data is a natural fit
-- DHS border surveillance, disaster response, infrastructure monitoring
-- Any prime (Deloitte, Leidos, Booz Allen, SAIC, Palantir) who just won GEOINT, ISR, or AI/ML work and needs a commercial daily EO data sub
-- OTAs, SBIRs, CRADAs where commercial EO data can displace legacy tasked imagery
-- NGA, NRO, SOCOM, DIA, Space Force programs — these are expansion targets, not current base
-- Any program mentioning AI/ML-ready data, automated GEOINT, analyst augmentation, or persistent monitoring
+PROCUREMENT VEHICLES EDF CAN USE:
+- SEWP V, NASA SEWP, GSA MAS Schedule 70
+- OTAs through DIU, Army Futures Command, AFWERX
+- SBIRs via DoD, NASA, NOAA
+- NGA OSINT/Commercial GEOINT vehicles
+- DHS EAGLE II, Army ITES-SW
+
+WHAT TRIGGERS A REAL OPPORTUNITY:
+- Any IC/DoD program needing persistent monitoring, change detection, or daily EO
+- Primes who just won GEOINT, ISR, or AI/ML contracts — they need a commercial data sub now
+- New PM or contracting officer appointments at NGA, NRO, SOCOM, DIA, Space Force
+- Competitor loss or contract expiration — Planet or Maxar losing an incumbent = open window
+- Budget increases for AI/ML, GEOINT, or ISR at any agency
+- Sources sought, RFIs, pre-solicitation notices — earlier than awards, still winnable
+- Set-asides (SBIR, 8a, small biz) where EDF can prime or sub strategically
 
 WHAT TO IGNORE:
-Pure IT services, cybersecurity, ground systems with no data angle, or anything where EO imagery is not the core need.
+Pure IT services, cybersecurity, ground systems with no data angle.
 
 YOUR JOB:
-Give Hunter something he could not get from reading the news. Be specific. Be opinionated. Name the program, the prime, the agency. Every insight should start with an imperative verb — "Reach out to...", "Monitor...", "Target...", "Flag...", "Position...", "Contact...", "Watch..." — never "Hunter should". Write like a war room briefing, not a memo.
+Write like a war room briefing. Imperative verbs only — "Reach out", "Target", "Monitor", "Flag", "Position", "Contact", "Watch", "Call". Never passive. Every item must be something that cannot be googled — connect dots between the data, name the specific angle for EDF.
 
 Return ONLY valid JSON. No markdown, no extra text, no code fences. Exactly this structure:
 
 {{
+  "moves_today": [
+    "One action to take TODAY — make a call, send an email. One sentence, imperative, specific org/person.",
+    "Second action for today. Same standard.",
+    "Third action for today. Same standard."
+  ],
   "top_3": [
-    "MAX 2 sentences. Name the agency or prime. State the specific action and why EDF's daily AI data solves their exact problem. No URLs. No markdown.",
-    "MAX 2 sentences. Same standard — specific, opinionated, name names. No URLs. No markdown.",
-    "MAX 2 sentences. Same standard. No URLs. No markdown."
+    "MAX 2 sentences. Specific opportunity, why it maps to EDF data, what the move is. Imperative verb. No URLs.",
+    "MAX 2 sentences. Same standard.",
+    "MAX 2 sentences. Same standard."
   ],
   "contacts": [
-    "One sentence. Org name and why they need EDF data right now. No URLs. No markdown.",
-    "One sentence. Same standard. No URLs. No markdown."
+    "One sentence. Specific org or prime to reach, what they just won or need, why EDF data fits now. No URLs.",
+    "One sentence. Same standard."
   ],
   "dept_moves": [
-    "One sentence. Name the specific shift and what Hunter does about it this week. No URLs. No markdown.",
-    "One sentence. Same standard. No URLs. No markdown."
+    "One sentence. Budget shift, new appointment, RFI, or reorg — specific angle for EDF this week. No URLs.",
+    "One sentence. Same standard."
+  ],
+  "competitive": [
+    "One sentence. What a competitor (Planet, Maxar, BlackSky, Satellogic) just did and what it means for EDF. No URLs.",
+    "One sentence. Same standard."
+  ],
+  "vehicles": [
+    "One sentence. Specific contract vehicle or set-aside EDF should use to pursue something in today's data. No URLs.",
+    "One sentence. Same standard."
   ]
 }}
 
@@ -207,13 +227,16 @@ Data: {context}"""
         raw    = response.choices[0].message.content.strip()
         raw    = raw.replace("```json", "").replace("```", "").strip()
         parsed = json.loads(raw)
-        top_3      = [strip_md(x) for x in parsed.get("top_3",      ["No data returned."])]
-        contacts   = [strip_md(x) for x in parsed.get("contacts",   [])]
-        dept_moves = [strip_md(x) for x in parsed.get("dept_moves", [])]
-        return (top_3, contacts, dept_moves)
+        moves_today  = [strip_md(x) for x in parsed.get("moves_today",  [])]
+        top_3        = [strip_md(x) for x in parsed.get("top_3",        ["No data returned."])]
+        contacts     = [strip_md(x) for x in parsed.get("contacts",     [])]
+        dept_moves   = [strip_md(x) for x in parsed.get("dept_moves",   [])]
+        competitive  = [strip_md(x) for x in parsed.get("competitive",  [])]
+        vehicles     = [strip_md(x) for x in parsed.get("vehicles",     [])]
+        return (moves_today, top_3, contacts, dept_moves, competitive, vehicles)
     except Exception as e:
         print(f"Groq error: {e}")
-        return (["Intel unavailable — check Groq API key or quota."], [], [])
+        return ([], ["Intel unavailable — check Groq API key or quota."], [], [], [], [])
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -221,19 +244,22 @@ sam    = get_sam_opps()
 rss    = get_rss()
 awards = get_usaspending_awards()
 
-top_3, contacts, dept_moves = groq_summarize(sam, rss, awards)
+moves_today, top_3, contacts, dept_moves, competitive, vehicles = groq_summarize(sam, rss, awards)
 
 print(f"SAM: {len(sam)} opps | Awards: {len(awards)} | RSS: {len(rss)} articles")
 
 # Render HTML + PDF
 html = Template(open("templates/report.html").read()).render(
-    date       = datetime.now().strftime("%B %d, %Y"),
-    top_3      = top_3,
-    contacts   = contacts,
-    dept_moves = dept_moves,
-    sam        = sam[:8],
-    awards     = awards,
-    rss        = rss
+    date        = datetime.now().strftime("%B %d, %Y"),
+    moves_today = moves_today,
+    top_3       = top_3,
+    contacts    = contacts,
+    dept_moves  = dept_moves,
+    competitive = competitive,
+    vehicles    = vehicles,
+    sam         = sam[:8],
+    awards      = awards,
+    rss         = rss
 )
 
 with open("daily_brief.html", "w") as f:
