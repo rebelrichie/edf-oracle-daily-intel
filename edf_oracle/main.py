@@ -405,3 +405,27 @@ else:
     print("⚠️  No data for HubSpot CSV — check SAM API key and quota")
 
 print("✅ Oracle v6 complete — BD Intel Brief generated")
+import shutil
+os.makedirs("docs", exist_ok=True)
+
+dashboard_data = {
+    "generated"        : datetime.now().isoformat(),
+    "date"             : datetime.now().strftime("%B %d, %Y"),
+    "moves_today"      : moves_today,
+    "top_3"            : top_3,
+    "contacts"         : contacts,
+    "dept_moves"       : dept_moves,
+    "competitive"      : competitive,
+    "vehicles"         : vehicles,
+    "sam"              : sam[:8],
+    "awards"           : awards,
+    "competitor_awards": competitor_awards,
+    "rss"              : rss
+}
+
+with open("docs/data.json", "w") as f:
+    json.dump(dashboard_data, f, indent=2, default=str)
+print("✅ docs/data.json written")
+
+shutil.copy("daily_brief.pdf", "docs/daily_brief.pdf")
+print("✅ PDF copied to docs/")
