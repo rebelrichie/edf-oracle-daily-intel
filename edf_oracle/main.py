@@ -168,8 +168,8 @@ def get_competitor_awards():
                         results.append({
                             "competitor"  : comp,
                             "description" : (item.get("Description") or "")[:100],
-                            "amount"      : amt,
-                            "agency"      : item.get("Awarding Agency Name", ""),
+                            "amount"      : float(amt) if amt else 0.0,
+                            "agency"      : (item.get("Awarding Agency Name") or "")[:50],
                             "date"        : item.get("Period of Performance Start Date", "")
                         })
         except Exception as e:
