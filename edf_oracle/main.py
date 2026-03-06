@@ -6,11 +6,11 @@ import weasyprint
 
 SAM_KEY = os.getenv("SAM_API_KEY")
 GROQ_KEY = os.getenv("GROQ_API_KEY")
-KEYWORDS = ["daily revisit", "EarthDaily", "GEOINT commercial", "change detection daily", "AI earth observation", "persistent monitoring"]
+KEYWORDS = ["daily revisit", "EarthDaily", "GEOINT commercial", "change detection daily", "AI earth observation", "persistent monitoring", "NGA", "Space Force", "DIU", "SOCOM"]
 
 def get_sam_opps():
     url = "https://api.sam.gov/opportunities/v2/search"
-    params = {'api_key': SAM_KEY, 'limit': 30, 'postedFrom': (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d'), 'keyword': 'geospatial OR satellite OR EO'}
+    params = {'api_key': SAM_KEY, 'limit': 30, 'postedFrom': (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d'), 'keyword': 'geospatial OR satellite OR EO OR GEOINT OR "daily revisit"'}
     r = requests.get(url, params=params)
     data = r.json() if r.ok else {}
     opps = data.get('opportunitiesData', [])
@@ -29,7 +29,12 @@ def get_rss():
 def groq_summarize(sam, rss):
     client = Groq(api_key=GROQ_KEY)
     context = f"SAM opps: {len(sam)}\nRSS: {[a['title'] for a in rss]}"
-    prompt = "You are the EarthDaily Oracle. Create exactly 3 bullet points for 'Top 3 Must-Chase Today'. For each: why it matters for daily 5m EO + one draft outreach sentence. Keep it short."
+    prompt = """You are the EarthDaily Federal Oracle for DoD sales ONLY. 
+    STRICT RULES: ONLY talk about US DoD, NGA, Space Force, DIU, AFWERX, SOCOM, Army or federal defense opportunities. 
+    NEVER mention NASA, civilian environmental topics, foreign space programs (India, etc.), or rainforest. 
+    Focus ONLY on daily revisit EO, GEOINT, satellite analytics, change detection for defense missions.
+    Create exactly 3 bullet points titled "Top 3 Must-Chase Today".
+    For each: 1-sentence why it matters for daily 5m EO + one draft outreach sentence to a DoD program manager."""
     response = client.chat.completions.create(model="llama-3.1-8b-instant", messages=[{"role": "user", "content": prompt + "\nData: " + context}], temperature=0.7)
     return response.choices[0].message.content.split("\n")
 
@@ -42,7 +47,6 @@ html = Template(open("templates/report.html").read()).render(date=datetime.now()
 with open("daily_brief.html", "w") as f: f.write(html)
 weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
 
-# FIXED: dynamic length so it never crashes
 n = min(5, len(sam))
 df = pd.DataFrame({
     "Opportunity Name": [f"EDF Oracle – {opp.get('title','New GEOINT')[:60]}" for opp in sam[:n]],
