@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>EarthDaily Federal — BD Intel Operations</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -378,7 +378,8 @@
   .tbl-wrap {
     border: 1px solid var(--teal-border);
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   table { width: 100%; border-collapse: collapse; }
@@ -581,18 +582,37 @@
   /* RESPONSIVE */
   @media (max-width: 1200px) {
     html { font-size: clamp(13px, 1.3vw, 16px); }
+    .moves-grid, .top3-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media (max-width: 900px) {
     html { font-size: 15px; }
     .moves-grid, .top3-grid { grid-template-columns: 1fr; }
-    .nav-right .live-badge, .nav-right .btn-download { display: none; }
+    .nav-right .live-badge { display: none; }
+    .hero h1 { font-size: 36px; }
+    .tbl-wrap { overflow-x: auto; }
+    table { min-width: 500px; }
   }
 
   @media (max-width: 600px) {
-    html { font-size: 16px; }
+    html { font-size: 15px; }
     .wrap { padding: 0 16px; }
-    .hero { padding: 32px 0 24px; }
+    .nav-inner { padding: 14px 16px; }
+    .nav-right .btn-download { display: none; }
+    .hero { padding: 28px 0 20px; }
+    .hero h1 { font-size: 30px; }
+    .hero-meta { gap: 12px; }
+    .hero-stat { font-size: 0.68rem; }
+    .sec { margin-bottom: 28px; }
+    .intel-card { padding: 14px 16px; }
+    .move-card { padding: 14px 16px; }
+    .t3-card { padding: 14px 16px; }
+    .bz-item { padding: 12px 14px; }
+    .search-bar { flex-wrap: wrap; }
+    .filter-btn { font-size: 0.65rem; padding: 8px 10px; }
+    thead th { padding: 10px 12px; }
+    tbody td { padding: 10px 12px; }
+    footer { padding: 20px 16px; flex-direction: column; gap: 12px; text-align: center; }
   }
 </style>
 </head>
