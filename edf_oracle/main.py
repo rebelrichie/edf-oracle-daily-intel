@@ -152,7 +152,8 @@ def get_competitor_awards():
                 "recipient_search_text": [comp]
             },
             "fields": ["Award ID", "Recipient Name", "Award Amount", "Description",
-                       "Awarding Agency Name", "Period of Performance Start Date"],
+                       "Awarding Agency Name", "Awarding Sub Agency Name",
+                       "Period of Performance Start Date"],
             "sort" : "Award Amount",
             "order": "desc",
             "limit": 3,
@@ -165,11 +166,16 @@ def get_competitor_awards():
                 for item in r.json().get("results", []):
                     amt = item.get("Award Amount", 0) or 0
                     if float(amt) > 50000:  # filter out tiny mods
+                        agency = (
+                            item.get("Awarding Agency Name") or
+                            item.get("Awarding Sub Agency Name") or
+                            "DoD"
+                        )
                         results.append({
                             "competitor"  : comp,
-                            "description" : (item.get("Description") or "")[:100],
+                            "description" : (item.get("Description") or item.get("Award ID") or "")[:100],
                             "amount"      : float(amt) if amt else 0.0,
-                            "agency"      : (item.get("Awarding Agency Name") or "")[:50],
+                            "agency"      : agency[:50],
                             "date"        : item.get("Period of Performance Start Date", "")
                         })
         except Exception as e:
