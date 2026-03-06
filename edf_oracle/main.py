@@ -16,6 +16,12 @@ def get_sam_opps():
     opps = data.get('opportunitiesData', [])
     return [opp for opp in opps if any(k.lower() in str(opp).lower() for k in KEYWORDS)]
 
+def get_usaspending_awards():
+    url = "https://api.usaspending.gov/api/v2/awards/"
+    payload = {"filters": {"time_period": [{"start_date": (datetime.now()-timedelta(days=30)).strftime("%Y-%m-%d")}], "keyword": "geospatial OR GEOINT OR satellite OR EO"}}
+    r = requests.post(url, json=payload)
+    return r.json().get("results", [])[:5]
+
 def get_rss():
     feeds = ["https://breakingdefense.com/feed/", "https://spacenews.com/feed/", "https://www.defensenews.com/rss/"]
     articles = []
@@ -26,23 +32,27 @@ def get_rss():
                 articles.append({"title": entry.title, "link": entry.link, "source": feed.split("//")[1].split("/")[0]})
     return articles
 
-def groq_summarize(sam, rss):
+def groq_summarize(sam, rss, awards):
     client = Groq(api_key=GROQ_KEY)
-    context = f"SAM opps: {len(sam)}\nRSS: {[a['title'] for a in rss]}"
-    prompt = """You are the EarthDaily Federal Oracle for DoD sales ONLY. 
-    STRICT RULES: ONLY talk about US DoD, NGA, Space Force, DIU, AFWERX, SOCOM, Army or federal defense opportunities. 
-    NEVER mention NASA, civilian environmental topics, foreign space programs (India, etc.), or rainforest. 
-    Focus ONLY on daily revisit EO, GEOINT, satellite analytics, change detection for defense missions.
-    Create exactly 3 bullet points titled "Top 3 Must-Chase Today".
-    For each: 1-sentence why it matters for daily 5m EO + one draft outreach sentence to a DoD program manager."""
+    context = f"SAM opps: {len(sam)}\nRecent awards: {awards}\nRSS buzz: {[a['title'] for a in rss]}"
+    prompt = """You are the EarthDaily Federal Oracle for DoD sales. Analyze all data and create exactly 3 bullet points titled "Top 3 Must-Chase Today".
+    For each: 1-sentence why it matters for daily 5m EO + one draft outreach sentence to a DoD PM.
+    Focus ONLY on defense (NGA, Space Force, DIU, SOCOM, Army). Mention teaming opportunities or recent awards when relevant."""
     response = client.chat.completions.create(model="llama-3.1-8b-instant", messages=[{"role": "user", "content": prompt + "\nData: " + context}], temperature=0.7)
     return response.choices[0].message.content.split("\n")
 
 sam = get_sam_opps()
 rss = get_rss()
-top_3 = groq_summarize(sam, rss)
+awards = get_usaspending_awards()
+top_3 = groq_summarize(sam, rss, awards)
 
-html = Template(open("templates/report.html").read()).render(date=datetime.now().strftime("%B %d, %Y"), top_3=top_3, sam=sam[:8], rss=rss)
+html = Template(open("templates/report.html").read()).render(
+    date=datetime.now().strftime("%B %d, %Y"),
+    top_3=top_3,
+    sam=sam[:8],
+    awards=awards,
+    rss=rss
+)
 
 with open("daily_brief.html", "w") as f: f.write(html)
 weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
