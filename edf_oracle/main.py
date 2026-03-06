@@ -186,6 +186,43 @@ def get_competitor_awards():
     print(f"Competitor awards: {len(results)} found")
     return results[:6]
 
+
+
+# ── SAM Sources Sought / Pre-Solicitations ────────────────────────────────────
+def get_sources_sought():
+    """Pull Sources Sought and RFI notices — earlier than awards, still winnable."""
+    url = "https://api.sam.gov/opportunities/v2/search"
+    results = []
+    # Notice types: r=Sources Sought, i=Sources Sought/RFI, p=Presolicitation
+    for notice_type in ["r", "p"]:
+        params = {
+            "api_key"    : SAM_KEY,
+            "limit"      : 10,
+            "postedFrom" : (datetime.now() - timedelta(days=30)).strftime("%m/%d/%Y"),
+            "ptype"      : notice_type,
+            "keyword"    : 'geospatial OR satellite OR imagery OR GEOINT OR "earth observation" OR "remote sensing" OR ISR OR surveillance'
+        }
+        try:
+            r = requests.get(url, params=params, timeout=15)
+            print(f"Sources Sought status: {r.status_code} | type: {notice_type}")
+            if r.ok:
+                opps = r.json().get("opportunitiesData", [])
+                print(f"  -> {len(opps)} results")
+                for o in opps:
+                    results.append({
+                        "title"       : o.get("title", ""),
+                        "agency"      : o.get("fullParentPathName", ""),
+                        "notice_type" : "Sources Sought" if notice_type == "r" else "Pre-Solicitation",
+                        "posted"      : o.get("postedDate", ""),
+                        "response_due": o.get("responseDeadLine", ""),
+                        "link"        : o.get("uiLink", "")
+                    })
+        except Exception as e:
+            print(f"Sources Sought error ({notice_type}): {e}")
+
+    print(f"Sources Sought total: {len(results)}")
+    return results[:6]
+
 # ── RSS Feeds ─────────────────────────────────────────────────────────────────
 def get_rss():
     feeds = [
@@ -227,90 +264,79 @@ def get_rss():
 
 # ── Groq Summarizer ───────────────────────────────────────────────────────────
 def groq_summarize(sam, rss, awards, competitor_awards):
-    client  = Groq(api_key=GROQ_KEY)
+    client = Groq(api_key=GROQ_KEY)
+
     context = json.dumps({
-        "sam_count"        : len(sam),
-        "sam_titles"       : [o.get("title", "") for o in sam[:5]],
-        "awards"           : [{"recipient": a.get("recipient_name"), "desc": a.get("description", "")[:80]} for a in awards[:5]],
-        "news_headlines"   : [a["title"] for a in rss[:8]],
+        "sam_opportunities": [
+            {"title": o.get("title",""), "agency": o.get("fullParentPathName",""),
+             "type": o.get("type",""), "posted": o.get("postedDate","")}
+            for o in sam[:8]
+        ],
+        "recent_awards": [
+            {"recipient": a.get("recipient_name",""), "agency": a.get("agency",""),
+             "desc": a.get("description","")[:100], "amount": str(a.get("amount",""))}
+            for a in awards[:6]
+        ],
         "competitor_awards": [
-            {
-                "competitor": c.get("competitor"),
-                "agency"    : c.get("agency"),
-                "amount"    : c.get("amount"),
-                "desc"      : c.get("description","")[:80],
-                "date"      : c.get("date","")
-            }
+            {"competitor": c.get("competitor",""), "agency": c.get("agency",""),
+             "desc": c.get("description","")[:100], "amount": str(c.get("amount","")),
+             "date": c.get("date","")}
             for c in competitor_awards
-        ]
+        ],
+        "news_headlines": [a["title"] for a in rss[:10]],
+        "sources_sought": [{"title": s.get("title",""), "agency": s.get("agency",""), "type": s.get("notice_type",""), "due": s.get("response_due","")} for s in sources_sought]
     })
 
-    prompt = f"""You are the BD Oracle for EarthDaily Federal. You think like a senior IC-cleared business developer with 15 years selling data and platforms to the intelligence community and DoD.
-
-ABOUT EARTHDAILY FEDERAL:
-EarthDaily Federal sells AI-generated, analysis-ready earth observation data. Daily global coverage, change detection, and ML-ready imagery products built on the EarthDaily constellation. Their edge: daily revisit frequency, AI-ready pipelines, and automated change detection that replaces analyst-hours. DATA company, not services.
-
-CURRENT BASE:
-- Army is the anchor — strong existing relationships, push for expansion
-- Active with NASA, NOAA, DHS, all military branches
-- Primes: Deloitte, Leidos, Booz Allen, SAIC, Palantir — EDF subs data to them
-- Both direct contracts and prime subs in play
-- Competitors to watch: Planet Labs, Maxar, BlackSky, Satellogic, Umbra
-
-PROCUREMENT VEHICLES EDF CAN USE:
-- SEWP V, NASA SEWP, GSA MAS Schedule 70
-- OTAs through DIU, Army Futures Command, AFWERX
-- SBIRs via DoD, NASA, NOAA
-- NGA OSINT/Commercial GEOINT vehicles
-- DHS EAGLE II, Army ITES-SW
-
-WHAT TRIGGERS A REAL OPPORTUNITY:
-- Any IC/DoD program needing persistent monitoring, change detection, or daily EO
-- Primes who just won GEOINT, ISR, or AI/ML contracts — they need a commercial data sub now
-- New PM or contracting officer appointments at NGA, NRO, SOCOM, DIA, Space Force
-- Competitor loss or contract expiration — Planet or Maxar losing an incumbent = open window
-- Budget increases for AI/ML, GEOINT, or ISR at any agency
-- Sources sought, RFIs, pre-solicitation notices — earlier than awards, still winnable
-- Set-asides (SBIR, 8a, small biz) where EDF can prime or sub strategically
-
-WHAT TO IGNORE:
-Pure IT services, cybersecurity, ground systems with no data angle.
-
-YOUR JOB:
-Write like a war room briefing. Imperative verbs only — "Reach out", "Target", "Monitor", "Flag", "Position", "Contact", "Watch", "Call". Never passive. Every item must be something that cannot be googled — connect dots between the data, name the specific angle for EDF.
-
-Return ONLY valid JSON. No markdown, no extra text, no code fences. Exactly this structure:
-
-{{
-  "moves_today": [
-    "One action to take TODAY — make a call, send an email. One sentence, imperative, specific org/person.",
-    "Second action for today. Same standard.",
-    "Third action for today. Same standard."
-  ],
-  "top_3": [
-    "MAX 2 sentences. Specific opportunity, why it maps to EDF data, what the move is. Imperative verb. No URLs.",
-    "MAX 2 sentences. Same standard.",
-    "MAX 2 sentences. Same standard."
-  ],
-  "contacts": [
-    "One sentence. Specific org or prime to reach, what they just won or need, why EDF data fits now. No URLs.",
-    "One sentence. Same standard."
-  ],
-  "dept_moves": [
-    "One sentence. Budget shift, new appointment, RFI, or reorg — specific angle for EDF this week. No URLs.",
-    "One sentence. Same standard."
-  ],
-  "competitive": [
-    "One sentence. What a competitor (Planet, Maxar, BlackSky, Satellogic) just did and what it means for EDF. No URLs.",
-    "One sentence. Same standard."
-  ],
-  "vehicles": [
-    "One sentence. Specific contract vehicle or set-aside EDF should use to pursue something in today's data. No URLs.",
-    "One sentence. Same standard."
-  ]
-}}
-
-Data: {context}"""
+    prompt = (
+        "You are the BD Oracle for EarthDaily Federal.\n\n"
+        "CRITICAL RULE: You may ONLY reference companies, agencies, dollar amounts, and events "
+        "that appear EXPLICITLY in the DATA section at the bottom of this prompt. "
+        "Do NOT invent names, appointments, contract wins, or budget announcements. "
+        "Every single claim must be directly traceable to a specific item in the data. "
+        "If a fact is not in the data, do not state it.\n\n"
+        "ABOUT EDF: Sells AI-generated analysis-ready earth observation data. Daily global coverage, "
+        "change detection, ML-ready imagery. DATA company not services. Army anchor. Active with NASA, "
+        "NOAA, DHS. Primes: Deloitte, Leidos, Booz Allen, SAIC, Palantir. "
+        "Competitors: Planet Labs, Maxar, BlackSky, Satellogic, Umbra. "
+        "Vehicles: SEWP V, NASA SEWP, GSA MAS, DIU OTA, Army Futures Command OTA, AFWERX, "
+        "SBIRs, NGA OSINT vehicle, DHS EAGLE II, Army ITES-SW.\n\n"
+        "RULES:\n"
+        "- competitive section: ONLY reference competitors present in competitor_awards data. "
+        "State their actual agency and amount from the data. Nothing else.\n"
+        "- contacts section: ONLY reference primes or agencies present in recent_awards or sam_opportunities.\n"
+        "- dept_moves section: ONLY reference actual news headlines from news_headlines. "
+        "Quote the headline topic and give the EDF angle.\n"
+        "- All verbs imperative: Reach out, Target, Contact, Flag, Monitor, Position, Watch.\n"
+        "- Never passive. Never invent.\n\n"
+        "Return ONLY valid JSON, no markdown, no code fences:\n\n"
+        '{{"moves_today": ['
+        '"Imperative action referencing a specific org or award from the data.",'
+        '"Second action same standard.",'
+        '"Third action same standard."'
+        "],"
+        '"top_3": ['
+        '"MAX 2 sentences. Cite a specific award, SAM opp, or headline from the data. EDF angle.",'
+        '"Same.",'
+        '"Same."'
+        "],"
+        '"contacts": ['
+        '"Specific prime or agency from the data only. What they won. Why EDF fits.",'
+        '"Same standard."'
+        "],"
+        '"dept_moves": ['
+        '"Specific headline topic from news_headlines data. One sentence EDF implication.",'
+        '"Same standard."'
+        "],"
+        '"competitive": ['
+        '"Competitor from competitor_awards only. State their agency and amount from data. EDF implication.",'
+        '"Same — only competitors present in data."'
+        "],"
+        '"vehicles": ['
+        '"Specific vehicle tied to a specific opp or award in the data.",'
+        '"Same standard."'
+        "]}}"
+        f"\n\nDATA:\n{context}"
+    )
 
     try:
         response = client.chat.completions.create(
@@ -335,13 +361,14 @@ Data: {context}"""
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 sam               = get_sam_opps()
+sources_sought    = get_sources_sought()
 rss               = get_rss()
 awards            = get_usaspending_awards()
 competitor_awards = get_competitor_awards()
 
 moves_today, top_3, contacts, dept_moves, competitive, vehicles = groq_summarize(sam, rss, awards, competitor_awards)
 
-print(f"SAM: {len(sam)} opps | Awards: {len(awards)} | Competitors: {len(competitor_awards)} | RSS: {len(rss)} articles")
+print(f"SAM: {len(sam)} opps | Sources Sought: {len(sources_sought)} | Awards: {len(awards)} | Competitors: {len(competitor_awards)} | RSS: {len(rss)} articles")
 
 # Render HTML + PDF
 html = Template(open("templates/report.html").read()).render(
@@ -353,6 +380,7 @@ html = Template(open("templates/report.html").read()).render(
     competitive       = competitive,
     vehicles          = vehicles,
     sam               = sam[:8],
+    sources_sought    = sources_sought,
     awards            = awards,
     competitor_awards = competitor_awards,
     rss               = rss
@@ -405,27 +433,3 @@ else:
     print("⚠️  No data for HubSpot CSV — check SAM API key and quota")
 
 print("✅ Oracle v6 complete — BD Intel Brief generated")
-import shutil
-os.makedirs("docs", exist_ok=True)
-
-dashboard_data = {
-    "generated"        : datetime.now().isoformat(),
-    "date"             : datetime.now().strftime("%B %d, %Y"),
-    "moves_today"      : moves_today,
-    "top_3"            : top_3,
-    "contacts"         : contacts,
-    "dept_moves"       : dept_moves,
-    "competitive"      : competitive,
-    "vehicles"         : vehicles,
-    "sam"              : sam[:8],
-    "awards"           : awards,
-    "competitor_awards": competitor_awards,
-    "rss"              : rss
-}
-
-with open("docs/data.json", "w") as f:
-    json.dump(dashboard_data, f, indent=2, default=str)
-print("✅ docs/data.json written")
-
-shutil.copy("daily_brief.pdf", "docs/daily_brief.pdf")
-print("✅ PDF copied to docs/")
