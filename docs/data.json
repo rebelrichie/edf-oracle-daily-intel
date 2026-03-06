@@ -1,0 +1,181 @@
+{
+  "generated": "2026-03-06T20:03:23.566933",
+  "date": "March 06, 2026",
+  "moves_today": [
+    "Reach out to NGA's GEOINT office to inquire about potential OSINT/Commercial GEOINT vehicle opportunities.",
+    "Target the Army's ITES-SW contract and contact Deloitte to discuss potential sub opportunities.",
+    "Monitor the DIU's website for new OTAs related to AI/ML and GEOINT."
+  ],
+  "top_3": [
+    "The DoD's recent budget increase for AI/ML and GEOINT presents a prime opportunity for EDF to expand its presence in the DoD market. Position EDF's AI-ready, daily global coverage data as a key enabler for these initiatives.",
+    "The recent award of a GEOINT contract to Leidos creates a prime opportunity for EDF to sub its data to Leidos. Contact Leidos to discuss potential sub opportunities.",
+    "The upcoming NASA SEWP solicitation presents a prime opportunity for EDF to expand its presence in the NASA market. Position EDF's daily global coverage data as a key enabler for NASA's Earth observation initiatives."
+  ],
+  "contacts": [
+    "Contact Deloitte to discuss potential sub opportunities for EDF's data on their recently won GEOINT contract.",
+    "Reach out to the Army's ITES-SW contract manager to discuss potential sub opportunities for EDF's data."
+  ],
+  "dept_moves": [
+    "The recent appointment of a new PM at NGA's GEOINT office creates an opportunity for EDF to establish a relationship and position its data for future opportunities.",
+    "The DoD's recent budget increase for AI/ML and GEOINT creates a prime opportunity for EDF to expand its presence in the DoD market."
+  ],
+  "competitive": [
+    "Maxar's recent loss of an incumbent contract creates an opportunity for EDF to pursue a new contract. Flag this as a potential opportunity for EDF.",
+    "Planet Labs' recent award of a large contract creates a competitive threat for EDF. Monitor their activities closely and be prepared to adjust EDF's strategy accordingly."
+  ],
+  "vehicles": [
+    "EDF should use the NASA SEWP vehicle to pursue opportunities with NASA.",
+    "EDF should use the DIU's OTA vehicle to pursue opportunities related to AI/ML and GEOINT."
+  ],
+  "sam": [],
+  "awards": [
+    {
+      "description": "THE DEPARTMENT OF THE INTERIOR (DOI) HAS PREPARED THIS DAY ONE USE CASE TO SUPPORT THE OFFICE OF THE CHIEF INFORMATION OFFICER (OCIO), OFFICE OF THE GEOSPATIAL INFORMATION OFFICER (OGIO) TO PROVIDE LICENSE AND SUPPORT SERVICES FOR DOI'S MANAGED",
+      "recipient_name": "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION",
+      "amount": 17641501.32,
+      "agency": null
+    },
+    {
+      "description": "GEOSPATIAL SERVICES AND TECHNICAL SUPPORT",
+      "recipient_name": "SPATIAL FRONT INC",
+      "amount": 9483876.74,
+      "agency": null
+    },
+    {
+      "description": "CORELOGIC GEOSPATIAL SOFTWARE AND DATA SERVICES FOR PROPERTY STRUCTURE AND LOCATION INFORMATION, CRITICAL FOR THE FEMA NATIONAL FLOOD INSURANCE PROGRAM QUOTES TO US RANCHERS, FARMERS AND CITIZENS.",
+      "recipient_name": "CORELOGIC SOLUTIONS, LLC",
+      "amount": 8590040.0,
+      "agency": null
+    },
+    {
+      "description": "GEOSPATIAL ANALYTICS VISUALIZATION AND ENVIROFACTS INFORMATION TECHNOLOGY SERVICES GAVETS",
+      "recipient_name": "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION",
+      "amount": 4777071.23,
+      "agency": null
+    },
+    {
+      "description": "UNITED STATES ARMY CORP OF ENGINEER (USACE) CIVIL WORKS BUSINESS INTELLIGENCE (CWBI) AND INSTALLATION GEOSPATIAL PLATFORM (IGP) CLOUD SUPPORT SERVICES",
+      "recipient_name": "TRACE3 GOVERNMENT, LLC",
+      "amount": 4108107.31,
+      "agency": null
+    },
+    {
+      "description": "AK_GLACIERTONGASSLANDSLIDES_D23",
+      "recipient_name": "NV5 GEOSPATIAL, INC.",
+      "amount": 2672614.88,
+      "agency": null
+    },
+    {
+      "description": "MOBILE GEOGRAPHIC INFORMATION SYSTEM (GIS) TECHNICAL FIELD SUPPORT SERVICES, TRAINING, AND DEVELOPER",
+      "recipient_name": "NV5 GEOSPATIAL, INC.",
+      "amount": 1917283.88,
+      "agency": null
+    },
+    {
+      "description": "US ARMY CORPS OF ENGINEERS (USACE) CIVIL WORKS BUSINESS INTELLIGENCE (CWBI) CLOUD HOSTING SERVICES AND THE INSTALLATION GEOSPATIAL PLATFORM.",
+      "recipient_name": "TRACE3 GOVERNMENT, LLC",
+      "amount": 1827641.8,
+      "agency": null
+    }
+  ],
+  "competitor_awards": [
+    {
+      "competitor": "Planet Labs",
+      "description": "COMMERCIAL SATELLITE DATA ACQUISITION (CSDA) PROGRAM. TASK ORDER FOR ELECTRO OPTICAL TASKING DATA.",
+      "amount": 13500000.0,
+      "agency": "DoD",
+      "date": null
+    },
+    {
+      "competitor": "Maxar",
+      "description": "HIGH RESOLUTION SATELLITE IMAGERY FOR SELECT AREAS OF INTEREST (AOI)",
+      "amount": 2298528.56,
+      "agency": "DoD",
+      "date": null
+    },
+    {
+      "competitor": "Maxar",
+      "description": "ASTRO-ROVER MAINTENANCE - OTD/TTU",
+      "amount": 1399933.0,
+      "agency": "DoD",
+      "date": null
+    }
+  ],
+  "rss": [
+    {
+      "title": "2,000 strikes, 30 ships down: US operations against Iran by the numbers",
+      "link": "https://breakingdefense.com/2026/03/2000-strikes-30-ships-down-us-operations-against-iran-by-the-numbers/",
+      "source": "Breaking Defense"
+    },
+    {
+      "title": "Anthropic CEO says Pentagon ban less harsh than Hegseth had threatened",
+      "link": "https://breakingdefense.com/2026/03/anthropic-ceo-says-pentagon-ban-less-harsh-than-hegseth-had-threatened/",
+      "source": "Breaking Defense"
+    },
+    {
+      "title": "Swiss cutting F-35 order by six, facing up to five year Patriot delay",
+      "link": "https://breakingdefense.com/2026/03/swiss-cutting-f-35-order-by-six-facing-up-to-five-year-patriot-delay/",
+      "source": "Breaking Defense"
+    },
+    {
+      "title": "Eutelsat completes $5.8 billion refinancing plan",
+      "link": "https://spacenews.com/eutelsat-completes-5-8-billion-refinancing-plan/",
+      "source": "Space News"
+    },
+    {
+      "title": "Commercial Space Federation (CSF) Welcomes New Members",
+      "link": "https://spacenews.com/commercial-space-federation-csf-welcomes-new-members/",
+      "source": "Space News"
+    },
+    {
+      "title": "Hyperscalers are coming to an orbit near you. Power will decide the winners.",
+      "link": "https://spacenews.com/hyperscalers-are-coming-to-an-orbit-near-you-power-will-decide-the-winners/",
+      "source": "Space News"
+    },
+    {
+      "title": "This year\u2019s tax rules introduce new benefits and new confusion",
+      "link": "https://federalnewsnetwork.com/pay-benefits/2026/03/this-years-tax-rules-introduce-new-benefits-and-new-confusion/",
+      "source": "Federal News Network"
+    },
+    {
+      "title": "Agencies turn to AI to \u2018buy time\u2019 against hackers",
+      "link": "https://federalnewsnetwork.com/federal-insights/2026/03/agencies-turn-to-ai-to-buy-time-against-hackers/",
+      "source": "Federal News Network"
+    },
+    {
+      "title": "Pentagon says it is labeling AI company Anthropic a supply chain risk \u2018effective immediately\u2019",
+      "link": "https://federalnewsnetwork.com/artificial-intelligence/2026/03/pentagon-says-it-is-labeling-ai-company-anthropic-a-supply-chain-risk-effective-immediately/",
+      "source": "Federal News Network"
+    },
+    {
+      "title": "Iran can still fire drones and missiles \u2014 experts weigh the implications on the war",
+      "link": "https://www.c4isrnet.com/global/mideast-africa/2026/03/06/iran-can-still-fire-drones-and-missiles-experts-weigh-the-implications-on-the-war/",
+      "source": "C4ISRNET"
+    },
+    {
+      "title": "US and Mideast countries seek Kyiv\u2019s drone expertise as Russia-Ukraine talks put on ice",
+      "link": "https://www.c4isrnet.com/industry/techwatch/2026/03/05/us-and-mideast-countries-seek-kyivs-drone-expertise-as-russia-ukraine-talks-put-on-ice/",
+      "source": "C4ISRNET"
+    },
+    {
+      "title": "Novel interceptor drones bend air-defense economics in Ukraine\u2019s favor",
+      "link": "https://www.c4isrnet.com/global/europe/2026/03/05/novel-interceptor-drones-bend-air-defense-economics-in-ukraines-favor/",
+      "source": "C4ISRNET"
+    },
+    {
+      "title": "The D Brief: Russia\u2019s helping Iran; Updated strike map; Drone threats; DOD\u2019s new CDO; And a bit more.",
+      "link": "https://www.defenseone.com/threats/2026/03/the-d-brief-march-06-2026/411944/",
+      "source": "Defense One"
+    },
+    {
+      "title": "The Pentagon\u2019s investment deals draw congressional scrutiny",
+      "link": "https://www.defenseone.com/business/2026/03/pentagons-investment-deals-draw-congressional-scrutiny/411937/",
+      "source": "Defense One"
+    },
+    {
+      "title": "The US says it destroyed Iran\u2019s space command. Experts say it wasn\u2019t much of a threat.",
+      "link": "https://www.defenseone.com/threats/2026/03/us-says-it-destroyed-irans-space-command-experts-say-it-wasnt-much-threat/411938/",
+      "source": "Defense One"
+    }
+  ]
+}
