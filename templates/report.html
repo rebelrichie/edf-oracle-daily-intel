@@ -20,9 +20,13 @@ a{color:#7CCBC3;}
 
 <h2>New SAM.gov Opportunities</h2>
 <table><tr><th>Title</th><th>Agency</th><th>Link</th></tr>
-{% for opp in sam %}<tr><td>{{ opp.get('title','') }}</td><td>{{ opp.get('fullParentPathName','DoD') }}</td><td><a href="{{ opp.get('uiLink', '') }}">→ Open in SAM.gov</a></td></tr>{% endfor %}</table>
+{% for opp in sam %}<tr><td>{{ opp.get('title','') }}</td><td>{{ opp.get('fullParentPathName','DoD') }}</td><td><a href="{{ opp.get('uiLink', '') }}">→ Open</a></td></tr>{% endfor %}</table>
 
-<h2>Industry Buzz</h2>
+<h2>Recent Awards & Teaming Spotlight</h2>
+<table><tr><th>Award</th><th>Agency</th><th>Teaming Play</th></tr>
+{% for a in awards %}<tr><td>{{ a.get('description','')[:80] }}</td><td>DoD</td><td>Prime: {{ a.get('recipient_name','') }} — reach out for sub</td></tr>{% endfor %}</table>
+
+<h2>Industry Buzz & Competitor Moves</h2>
 {% for a in rss %}<p>🔥 <a href="{{ a.link }}">{{ a.title }}</a> ({{ a.source }})</p>{% endfor %}
 
 <p style="text-align:center;color:#7CCBC3;margin-top:40px;">Oracle built for EarthDaily Federal • New logos start here</p>
