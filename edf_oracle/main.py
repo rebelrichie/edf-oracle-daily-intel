@@ -289,56 +289,24 @@ def groq_summarize(sam, rss, awards, competitor_awards):
         "sources_sought": [{"title": s.get("title",""), "agency": s.get("agency",""), "type": s.get("notice_type",""), "due": s.get("response_due","")} for s in sources_sought]
     })
 
-    prompt = (
-        "You are the BD Oracle for EarthDaily Federal.\n\n"
-        "CRITICAL RULE: You may ONLY reference companies, agencies, dollar amounts, and events "
-        "that appear EXPLICITLY in the DATA section at the bottom of this prompt. "
-        "Do NOT invent names, appointments, contract wins, or budget announcements. "
-        "Every single claim must be directly traceable to a specific item in the data. "
-        "If a fact is not in the data, do not state it.\n\n"
-        "ABOUT EDF: Sells AI-generated analysis-ready earth observation data. Daily global coverage, "
-        "change detection, ML-ready imagery. DATA company not services. Army anchor. Active with NASA, "
-        "NOAA, DHS. Primes: Deloitte, Leidos, Booz Allen, SAIC, Palantir. "
-        "Competitors: Planet Labs, Maxar, BlackSky, Satellogic, Umbra. "
-        "Vehicles: SEWP V, NASA SEWP, GSA MAS, DIU OTA, Army Futures Command OTA, AFWERX, "
-        "SBIRs, NGA OSINT vehicle, DHS EAGLE II, Army ITES-SW.\n\n"
-        "RULES:\n"
-        "- competitive section: ONLY reference competitors present in competitor_awards data. "
-        "State their actual agency and amount from the data. Nothing else.\n"
-        "- contacts section: ONLY reference primes or agencies present in recent_awards or sam_opportunities.\n"
-        "- dept_moves section: ONLY reference actual news headlines from news_headlines. "
-        "Quote the headline topic and give the EDF angle.\n"
-        "- All verbs imperative: Reach out, Target, Contact, Flag, Monitor, Position, Watch.\n"
-        "- Never passive. Never invent.\n\n"
-        "Return ONLY valid JSON, no markdown, no code fences:\n\n"
-        '{"moves_today": ['
-        '"Imperative action referencing a specific org or award from the data.",'
-        '"Second action same standard.",'
-        '"Third action same standard."'
-        "],"
-        '"top_3": ['
-        '"MAX 2 sentences. Cite a specific award, SAM opp, or headline from the data. EDF angle.",'
-        '"Same.",'
-        '"Same."'
-        "],"
-        '"contacts": ['
-        '"Specific prime or agency from the data only. What they won. Why EDF fits.",'
-        '"Same standard."'
-        "],"
-        '"dept_moves": ['
-        '"Specific headline topic from news_headlines data. One sentence EDF implication.",'
-        '"Same standard."'
-        "],"
-        '"competitive": ['
-        '"Competitor from competitor_awards only. State their agency and amount from data. EDF implication.",'
-        '"Same — only competitors present in data."'
-        "],"
-        '"vehicles": ['
-        '"Specific vehicle tied to a specific opp or award in the data.",'
-        '"Same standard."'
-        "]}}"
-        f"\n\nDATA:\n{context}"
-    )
+    prompt = f"""You are the BD Oracle for EarthDaily Federal.
+
+CRITICAL RULE: Only reference companies, agencies, amounts, and events that appear EXPLICITLY in the DATA below. Do not invent anything. Every claim must trace to a specific item in the data.
+
+ABOUT EDF: Sells AI-generated analysis-ready earth observation data. Daily global coverage, change detection, ML-ready imagery. DATA company not services. Army anchor. Active with NASA, NOAA, DHS. Primes: Deloitte, Leidos, Booz Allen, SAIC, Palantir. Competitors: Planet Labs, Maxar, BlackSky, Satellogic, Umbra. Vehicles: SEWP V, NASA SEWP, GSA MAS, DIU OTA, Army Futures Command OTA, AFWERX, SBIRs, NGA OSINT vehicle, DHS EAGLE II, Army ITES-SW.
+
+RULES:
+- competitive: ONLY reference competitors in competitor_awards. State their agency and amount from the data.
+- contacts: ONLY reference primes or agencies in recent_awards or sam_opportunities.
+- dept_moves: ONLY reference headlines from news_headlines. Give the EDF angle.
+- All verbs imperative. Never passive. Never invent.
+
+Return ONLY a valid JSON object. No markdown. No explanation. No code fences. Just the JSON.
+
+The JSON must have exactly these keys: moves_today (array of 3 strings), top_3 (array of 3 strings), contacts (array of 2 strings), dept_moves (array of 2 strings), competitive (array of 2 strings), vehicles (array of 2 strings).
+
+DATA:
+{context}"""
 
     try:
         response = client.chat.completions.create(
