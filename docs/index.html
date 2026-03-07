@@ -614,6 +614,132 @@
     tbody td { padding: 10px 12px; }
     footer { padding: 20px 16px; flex-direction: column; gap: 12px; text-align: center; }
   }
+
+  /* SUBSCRIBE */
+  .subscribe-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid rgba(226,196,107,0.3);
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .subscribe-btn:hover { background: rgba(226,196,107,0.2); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3,9,18,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface-2);
+    border: 1px solid var(--teal-border);
+    border-radius: 14px;
+    padding: 36px;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--muted-2);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+  }
+  .modal-close:hover { color: var(--text); }
+
+  .modal-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+
+  .modal h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .modal p {
+    font-size: 0.84rem;
+    color: var(--muted-2);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .modal-field {
+    margin-bottom: 12px;
+  }
+
+  .modal-field input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--teal-border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .modal-field input::placeholder { color: var(--muted); }
+  .modal-field input:focus { border-color: var(--teal); }
+
+  .modal-submit {
+    width: 100%;
+    background: var(--teal);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.15s;
+  }
+  .modal-submit:hover { opacity: 0.85; }
+  .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .modal-status {
+    margin-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-align: center;
+    min-height: 20px;
+  }
+  .modal-status.success { color: var(--teal); }
+  .modal-status.error   { color: var(--red); }
+
 </style>
 </head>
 <body>
@@ -627,6 +753,7 @@
     <div class="nav-right">
       <span class="nav-date" id="nav-date">Loading...</span>
       <div class="live-badge"><div class="live-dot"></div>Live Intel</div>
+      <button class="subscribe-btn" onclick="openSubscribe()">Subscribe</button>
       <a href="daily_brief.pdf" class="btn-download" download>↓ Download Brief</a>
     </div>
   </div>
@@ -971,5 +1098,91 @@ function applyRSSFilter() {
 
 loadData();
 </script>
+
+<!-- SUBSCRIBE MODAL -->
+<div class="modal-overlay" id="subscribe-modal" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSubscribe()">✕</button>
+    <div class="modal-eyebrow">EarthDaily Federal · Oracle</div>
+    <h2>Get the Daily Brief</h2>
+    <p>Subscribe to receive the BD Intel Brief every morning before the day starts. PDF attached, dashboard link included.</p>
+    <div class="modal-field">
+      <input type="text" id="sub-name" placeholder="Your name" autocomplete="name">
+    </div>
+    <div class="modal-field">
+      <input type="email" id="sub-email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <button class="modal-submit" id="sub-btn" onclick="submitSubscribe()">Subscribe</button>
+    <div class="modal-status" id="sub-status"></div>
+  </div>
+</div>
+
+<script>
+const WEBHOOK_URL = ''; // Paste your Apps Script URL here after deploying
+
+function openSubscribe() {
+  document.getElementById('subscribe-modal').classList.add('open');
+  document.getElementById('sub-email').focus();
+}
+
+function closeSubscribe() {
+  document.getElementById('subscribe-modal').classList.remove('open');
+  document.getElementById('sub-status').textContent = '';
+  document.getElementById('sub-status').className = 'modal-status';
+}
+
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('subscribe-modal')) closeSubscribe();
+}
+
+async function submitSubscribe() {
+  const email  = document.getElementById('sub-email').value.trim();
+  const name   = document.getElementById('sub-name').value.trim();
+  const btn    = document.getElementById('sub-btn');
+  const status = document.getElementById('sub-status');
+
+  if (!email || !email.includes('@')) {
+    status.textContent = 'Enter a valid email address.';
+    status.className = 'modal-status error';
+    return;
+  }
+
+  if (!WEBHOOK_URL) {
+    status.textContent = 'Subscribe endpoint not configured yet.';
+    status.className = 'modal-status error';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Subscribing...';
+  status.textContent = '';
+
+  try {
+    const r = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name })
+    });
+    const data = await r.json();
+    if (data.success) {
+      status.textContent = "You're in. Brief lands tomorrow morning.";
+      status.className = 'modal-status success';
+      btn.textContent = 'Subscribed';
+      setTimeout(closeSubscribe, 3000);
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
+  } catch(e) {
+    status.textContent = 'Something went wrong. Try again.';
+    status.className = 'modal-status error';
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+  }
+}
+
+// Close on Escape key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSubscribe(); });
+</script>
+
 </body>
 </html>
