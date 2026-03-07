@@ -58,6 +58,7 @@ def get_sam_opps():
             "api_key"    : SAM_KEY,
             "limit"      : 20,
             "postedFrom" : (datetime.now() - timedelta(days=14)).strftime("%m/%d/%Y"),
+            "postedTo"   : datetime.now().strftime("%m/%d/%Y"),
             "keyword"    : keywords
         }
         try:
@@ -199,6 +200,7 @@ def get_sources_sought():
             "api_key"    : SAM_KEY,
             "limit"      : 10,
             "postedFrom" : (datetime.now() - timedelta(days=30)).strftime("%m/%d/%Y"),
+            "postedTo"   : datetime.now().strftime("%m/%d/%Y"),
             "ptype"      : notice_type,
             "keyword"    : 'geospatial OR satellite OR imagery OR GEOINT OR "earth observation" OR "remote sensing" OR ISR OR surveillance'
         }
@@ -309,7 +311,7 @@ def groq_summarize(sam, rss, awards, competitor_awards):
         "- All verbs imperative: Reach out, Target, Contact, Flag, Monitor, Position, Watch.\n"
         "- Never passive. Never invent.\n\n"
         "Return ONLY valid JSON, no markdown, no code fences:\n\n"
-        '{{"moves_today": ['
+        '{"moves_today": ['
         '"Imperative action referencing a specific org or award from the data.",'
         '"Second action same standard.",'
         '"Third action same standard."'
