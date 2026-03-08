@@ -48,9 +48,9 @@ def get_sam_opps():
     # Try progressively broader searches until we get results
     keyword_passes = [
         'geospatial OR GEOINT OR "earth observation" OR "remote sensing"',
-        'satellite OR imagery OR NGA OR "Space Force" OR surveillance',
-        'AI OR "machine learning" OR "change detection" OR "persistent monitoring"',
-        'defense OR intelligence OR DoD OR Army OR Navy OR "Air Force"',
+        '"satellite imagery" OR "commercial imagery" OR NGA OR "Space Force" OR "persistent surveillance"',
+        '"change detection" OR "persistent monitoring" OR "AI imagery" OR "machine learning" GEOINT',
+        '"intelligence community" OR "ISR" OR "overhead imagery" OR "full motion video"',
     ]
     all_opps = []
     for keywords in keyword_passes:
@@ -300,6 +300,16 @@ RULES:
 - contacts: ONLY reference primes or agencies in recent_awards or sam_opportunities.
 - dept_moves: ONLY reference headlines from news_headlines. Give the EDF angle.
 - All verbs imperative. Never passive. Never invent.
+
+CRITICAL FORMAT RULES:
+- Every single string in the JSON must be a complete, grammatically correct sentence of 10-30 words.
+- moves_today strings must start with an imperative verb (Reach out, Contact, Target, Flag, Monitor).
+- top_3 strings must describe a specific opportunity and why EDF should pursue it.
+- contacts strings must name a specific org and what EDF should do with them.
+- dept_moves strings must reference a news headline and state the EDF implication.
+- competitive strings must name a competitor, their award amount, and what it means for EDF.
+- vehicles strings must name a specific contract vehicle and tie it to a real opportunity in the data.
+- NEVER output just a name, number, or fragment. Always full sentences.
 
 Return ONLY a valid JSON object. No markdown. No explanation. No code fences. Just the JSON.
 
