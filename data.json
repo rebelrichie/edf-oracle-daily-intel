@@ -1,33 +1,82 @@
 {
-  "generated": "2026-03-06T20:03:23.566933",
-  "date": "March 06, 2026",
+  "date": "March 08, 2026",
   "moves_today": [
-    "Reach out to NGA's GEOINT office to inquire about potential OSINT/Commercial GEOINT vehicle opportunities.",
-    "Target the Army's ITES-SW contract and contact Deloitte to discuss potential sub opportunities.",
-    "Monitor the DIU's website for new OTAs related to AI/ML and GEOINT."
+    "Reach out to Science Applications International Corporation to discuss their recent award from the Department of the Interior.",
+    "Contact Leidos to explore potential collaboration opportunities.",
+    "Target the Synopsis For: Vehicular Track Shoe Set, NSN 2530-00-150-5895, solicitation for a potential partnership."
   ],
   "top_3": [
-    "The DoD's recent budget increase for AI/ML and GEOINT presents a prime opportunity for EDF to expand its presence in the DoD market. Position EDF's AI-ready, daily global coverage data as a key enabler for these initiatives.",
-    "The recent award of a GEOINT contract to Leidos creates a prime opportunity for EDF to sub its data to Leidos. Contact Leidos to discuss potential sub opportunities.",
-    "The upcoming NASA SEWP solicitation presents a prime opportunity for EDF to expand its presence in the NASA market. Position EDF's daily global coverage data as a key enabler for NASA's Earth observation initiatives."
+    "Pursue the Army ITES-SW contract vehicle to access a large and diverse customer base.",
+    "Focus on the NASA SEWP contract vehicle to leverage the agency's vast resources and expertise.",
+    "Target the Army Futures Command OTA contract vehicle to stay ahead of the curve in emerging technologies."
   ],
   "contacts": [
-    "Contact Deloitte to discuss potential sub opportunities for EDF's data on their recently won GEOINT contract.",
-    "Reach out to the Army's ITES-SW contract manager to discuss potential sub opportunities for EDF's data."
+    "Engage with Deloitte to discuss their recent award from the Department of the Interior and explore potential collaboration opportunities.",
+    "Partner with Palantir to leverage their expertise in geospatial analytics and visualization."
   ],
   "dept_moves": [
-    "The recent appointment of a new PM at NGA's GEOINT office creates an opportunity for EDF to establish a relationship and position its data for future opportunities.",
-    "The DoD's recent budget increase for AI/ML and GEOINT creates a prime opportunity for EDF to expand its presence in the DoD market."
+    "The Pentagon task force's laser test against drones could lead to new opportunities for EarthDaily Federal in the development of counter-drone technologies.",
+    "The new rules implementing the Administrative False Claims Act could expand how federal agencies pursue smaller fraud cases, potentially impacting EarthDaily Federal's business operations."
   ],
   "competitive": [
-    "Maxar's recent loss of an incumbent contract creates an opportunity for EDF to pursue a new contract. Flag this as a potential opportunity for EDF.",
-    "Planet Labs' recent award of a large contract creates a competitive threat for EDF. Monitor their activities closely and be prepared to adjust EDF's strategy accordingly."
+    "Maxar's $2,298,528.56 award from the Department of Defense for high-resolution satellite imagery could indicate a growing demand for such services, posing a competitive threat to EarthDaily Federal.",
+    "BlackSky's $99 million contract from the Air Force lab for a large optical satellite payload could signal a shift in the market towards larger-scale satellite deployments, impacting EarthDaily Federal's competitive position."
   ],
   "vehicles": [
-    "EDF should use the NASA SEWP vehicle to pursue opportunities with NASA.",
-    "EDF should use the DIU's OTA vehicle to pursue opportunities related to AI/ML and GEOINT."
+    "Access the SEWP V contract vehicle to bid on NASA's upcoming solicitations for geospatial data and analytics services.",
+    "Leverage the GSA MAS contract vehicle to offer EarthDaily Federal's AI-generated analysis-ready earth observation data to a wide range of federal customers."
   ],
   "sam": [],
+  "sources_sought": [
+    {
+      "title": "REQUEST FOR INFORMATION (RFI) - Full Rate Production and Sustainment - MIBS program",
+      "agency": "DEPT OF DEFENSE.DEPT OF THE NAVY.SPAWAR.SPAWAR HQ.NAVAL INFORMATION WARFARE SYSTEMS",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-06",
+      "response_due": "2026-03-30T17:00:00-07:00",
+      "link": "https://sam.gov/workspace/contract/opp/fd1e65b025204b0a805faae2a337cbef/view"
+    },
+    {
+      "title": "Refuse Collection and Recycling Services at the AFRC, Bristol, PA",
+      "agency": "DEPT OF DEFENSE.DEPT OF THE ARMY.AMC.ACC.ACC-CTRS.ACC-NJ.W6QK ACC-PICA",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-06",
+      "response_due": "2026-03-11T10:00:00-04:00",
+      "link": "https://sam.gov/workspace/contract/opp/f4b26770874447088590568e8e0c44eb/view"
+    },
+    {
+      "title": "6515--Sources Sought - Pill Packaging System",
+      "agency": "VETERANS AFFAIRS, DEPARTMENT OF.VETERANS AFFAIRS, DEPARTMENT OF.NETWORK CONTRACT OFFICE 19 (36C259)",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-06",
+      "response_due": "2026-03-13T10:00:00-06:00",
+      "link": "https://sam.gov/workspace/contract/opp/f45eb830ffc14f50bfd2ad2161aad948/view"
+    },
+    {
+      "title": "Nuclear-Powered Submarine Material Harvesting and Refurbishment",
+      "agency": "DEPT OF DEFENSE.DEPT OF THE NAVY.NAVSEA.NAVSEA HQ.NAVSEA HQ",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-06",
+      "response_due": "2026-03-22T08:00:00-04:00",
+      "link": "https://sam.gov/workspace/contract/opp/f3c9fc2b215343769970a006631d3b0b/view"
+    },
+    {
+      "title": "Replace and Repair Stairwells at FCC Coleman, Florida",
+      "agency": "JUSTICE, DEPARTMENT OF.FEDERAL PRISON SYSTEM / BUREAU OF PRISONS.FAO",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-06",
+      "response_due": "2026-03-18T16:00:00-05:00",
+      "link": "https://sam.gov/workspace/contract/opp/f18a9620a84541c597d90fadbddb069e/view"
+    },
+    {
+      "title": "Synopsis For: Vehicular Track Shoe Set, NSN 2530-00-150-5895",
+      "agency": "DEPT OF DEFENSE.DEPT OF THE ARMY.AMC.ACC.ACC-CTRS.ACC-DTA.W6QK ACC- DTA",
+      "notice_type": "Pre-Solicitation",
+      "posted": "2026-03-07",
+      "response_due": "2026-03-23T12:00:00-04:00",
+      "link": "https://sam.gov/workspace/contract/opp/e684e13bf9394eacba481355ac7fe617/view"
+    }
+  ],
   "awards": [
     {
       "description": "THE DEPARTMENT OF THE INTERIOR (DOI) HAS PREPARED THIS DAY ONE USE CASE TO SUPPORT THE OFFICE OF THE CHIEF INFORMATION OFFICER (OCIO), OFFICE OF THE GEOSPATIAL INFORMATION OFFICER (OGIO) TO PROVIDE LICENSE AND SUPPORT SERVICES FOR DOI'S MANAGED",
@@ -80,13 +129,6 @@
   ],
   "competitor_awards": [
     {
-      "competitor": "Planet Labs",
-      "description": "COMMERCIAL SATELLITE DATA ACQUISITION (CSDA) PROGRAM. TASK ORDER FOR ELECTRO OPTICAL TASKING DATA.",
-      "amount": 13500000.0,
-      "agency": "DoD",
-      "date": null
-    },
-    {
       "competitor": "Maxar",
       "description": "HIGH RESOLUTION SATELLITE IMAGERY FOR SELECT AREAS OF INTEREST (AOI)",
       "amount": 2298528.56,
@@ -103,49 +145,54 @@
   ],
   "rss": [
     {
-      "title": "2,000 strikes, 30 ships down: US operations against Iran by the numbers",
+      "title": "How technology, strategy and industry are shaping the next fleet",
+      "link": "https://breakingdefense.com/2026/03/how-technology-strategy-and-industry-are-shaping-the-next-fleet/",
+      "source": "Breaking Defense"
+    },
+    {
+      "title": "Defense companies to quadruple production of \u2018exquisite\u2019 weapons: Trump",
+      "link": "https://breakingdefense.com/2026/03/defense-companies-to-quadruple-production-of-exquisite-weapons-trump/",
+      "source": "Breaking Defense"
+    },
+    {
+      "title": "3,000 strikes, 43 ships hit: US operations against Iran by the numbers",
       "link": "https://breakingdefense.com/2026/03/2000-strikes-30-ships-down-us-operations-against-iran-by-the-numbers/",
       "source": "Breaking Defense"
     },
     {
-      "title": "Anthropic CEO says Pentagon ban less harsh than Hegseth had threatened",
-      "link": "https://breakingdefense.com/2026/03/anthropic-ceo-says-pentagon-ban-less-harsh-than-hegseth-had-threatened/",
-      "source": "Breaking Defense"
-    },
-    {
-      "title": "Swiss cutting F-35 order by six, facing up to five year Patriot delay",
-      "link": "https://breakingdefense.com/2026/03/swiss-cutting-f-35-order-by-six-facing-up-to-five-year-patriot-delay/",
-      "source": "Breaking Defense"
-    },
-    {
-      "title": "Eutelsat completes $5.8 billion refinancing plan",
-      "link": "https://spacenews.com/eutelsat-completes-5-8-billion-refinancing-plan/",
+      "title": "RFA plans first launch this summer",
+      "link": "https://spacenews.com/rfa-plans-first-launch-this-summer/",
       "source": "Space News"
     },
     {
-      "title": "Commercial Space Federation (CSF) Welcomes New Members",
-      "link": "https://spacenews.com/commercial-space-federation-csf-welcomes-new-members/",
+      "title": "Air Force lab awards BlackSky contract worth up to $99 million for large optical satellite payload",
+      "link": "https://spacenews.com/air-force-lab-awards-blacksky-contract-worth-up-to-99-million-for-large-optical-satellite-payload/",
       "source": "Space News"
     },
     {
-      "title": "Hyperscalers are coming to an orbit near you. Power will decide the winners.",
-      "link": "https://spacenews.com/hyperscalers-are-coming-to-an-orbit-near-you-power-will-decide-the-winners/",
+      "title": "NASA selects Centaur for new SLS upper stage",
+      "link": "https://spacenews.com/nasa-selects-centaur-for-new-sls-upper-stage/",
       "source": "Space News"
     },
     {
-      "title": "This year\u2019s tax rules introduce new benefits and new confusion",
-      "link": "https://federalnewsnetwork.com/pay-benefits/2026/03/this-years-tax-rules-introduce-new-benefits-and-new-confusion/",
+      "title": "When speed becomes a vulnerability: Rethinking third-party risk in federal decision making",
+      "link": "https://federalnewsnetwork.com/commentary/2026/03/when-speed-becomes-a-vulnerability-rethinking-third-party-risk-in-federal-decision-making/",
       "source": "Federal News Network"
     },
     {
-      "title": "Agencies turn to AI to \u2018buy time\u2019 against hackers",
-      "link": "https://federalnewsnetwork.com/federal-insights/2026/03/agencies-turn-to-ai-to-buy-time-against-hackers/",
+      "title": "State CIOs have a new top priority in 2026",
+      "link": "https://federalnewsnetwork.com/ask-the-cio/2026/03/state-cios-have-a-new-top-priority-in-2026/",
       "source": "Federal News Network"
     },
     {
-      "title": "Pentagon says it is labeling AI company Anthropic a supply chain risk \u2018effective immediately\u2019",
-      "link": "https://federalnewsnetwork.com/artificial-intelligence/2026/03/pentagon-says-it-is-labeling-ai-company-anthropic-a-supply-chain-risk-effective-immediately/",
+      "title": "New rules implementing the Administrative False Claims Act could expand how federal agencies pursue smaller fraud cases",
+      "link": "https://federalnewsnetwork.com/management/2026/03/new-rules-implementing-the-administrative-false-claims-act-could-expand-how-federal-agencies-pursue-smaller-fraud-cases/",
       "source": "Federal News Network"
+    },
+    {
+      "title": "Pentagon task force to conduct laser test against drones",
+      "link": "https://www.c4isrnet.com/industry/techwatch/2026/03/06/pentagon-task-force-to-conduct-laser-test-against-drones/",
+      "source": "C4ISRNET"
     },
     {
       "title": "Iran can still fire drones and missiles \u2014 experts weigh the implications on the war",
@@ -158,23 +205,18 @@
       "source": "C4ISRNET"
     },
     {
-      "title": "Novel interceptor drones bend air-defense economics in Ukraine\u2019s favor",
-      "link": "https://www.c4isrnet.com/global/europe/2026/03/05/novel-interceptor-drones-bend-air-defense-economics-in-ukraines-favor/",
-      "source": "C4ISRNET"
+      "title": "The quantum curtain",
+      "link": "https://www.defenseone.com/ideas/2026/03/quantum-curtain/411967/",
+      "source": "Defense One"
+    },
+    {
+      "title": "Missile makers agree to \u2018quadruple\u2019 production, Trump says",
+      "link": "https://www.defenseone.com/business/2026/03/missile-makers-agree-quadruple-production-trump-says/411966/",
+      "source": "Defense One"
     },
     {
       "title": "The D Brief: Russia\u2019s helping Iran; Updated strike map; Drone threats; DOD\u2019s new CDO; And a bit more.",
       "link": "https://www.defenseone.com/threats/2026/03/the-d-brief-march-06-2026/411944/",
-      "source": "Defense One"
-    },
-    {
-      "title": "The Pentagon\u2019s investment deals draw congressional scrutiny",
-      "link": "https://www.defenseone.com/business/2026/03/pentagons-investment-deals-draw-congressional-scrutiny/411937/",
-      "source": "Defense One"
-    },
-    {
-      "title": "The US says it destroyed Iran\u2019s space command. Experts say it wasn\u2019t much of a threat.",
-      "link": "https://www.defenseone.com/threats/2026/03/us-says-it-destroyed-irans-space-command-experts-say-it-wasnt-much-threat/411938/",
       "source": "Defense One"
     }
   ]
