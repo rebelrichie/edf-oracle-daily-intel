@@ -85,9 +85,26 @@ def get_sam_opps():
             seen.add(nid)
             unique.append(o)
 
-    relevant = [o for o in unique if any(k.lower() in str(o).lower() for k in SAM_KEYWORDS)]
-    result = relevant if relevant else unique[:8]
-    print(f"SAM final: {len(result)} opportunities")
+    # Filter out DLA parts/supply chain noise and facilities/construction
+    EXCLUDE_PATTERNS = [
+        'dla aviation', 'dla land', 'dla maritime', 'dla troop', 'dla distribution',
+        'defense logistics agency',
+        'bracket', 'bearing', 'bushing', 'cable assembly', 'heating element',
+        'panel,power', 'spring,garter', 'sight,rear', 'mounting',
+        'renovate', 'renovation', 'switchgear', 'water system', 'flood alarm',
+        'manhole', 'polebridge', 'pullman nhp', 'glacier national',
+        '53--', '45--', '61--', '31--', '10--', 'z--', 'y--',
+    ]
+    def is_relevant(o):
+        text = str(o).lower()
+        if any(p in text for p in EXCLUDE_PATTERNS):
+            return False
+        return True
+
+    filtered = [o for o in unique if is_relevant(o)]
+    relevant = [o for o in filtered if any(k.lower() in str(o).lower() for k in SAM_KEYWORDS)]
+    result = relevant if relevant else filtered[:8]
+    print(f"SAM final: {len(result)} opportunities (filtered from {len(unique)})")
     return result
 
 
@@ -222,7 +239,14 @@ def get_sources_sought():
         except Exception as e:
             print(f"Sources Sought error ({notice_type}): {e}")
 
-    print(f"Sources Sought total: {len(results)}")
+    SS_EXCLUDE = [
+        'renovate', 'renovation', 'switchgear', 'water system', 'flood alarm',
+        'manhole', 'polebridge', 'pullman nhp', 'glacier national', 'heating element',
+        'bracket', 'bearing', 'bushing', 'panel,power', 'spring,garter',
+        'z--', 'y--', 'ak_glacier', 'tenkiller', 'camp zama', 'a-pak',
+    ]
+    results = [r for r in results if not any(p in r.get('title','').lower() for p in SS_EXCLUDE)]
+    print(f"Sources Sought total: {len(results)} (after filter)")
     return results[:6]
 
 # ── RSS Feeds ─────────────────────────────────────────────────────────────────
@@ -371,6 +395,28 @@ with open("daily_brief.html", "w") as f:
 
 weasyprint.HTML(string=html).write_pdf("daily_brief.pdf")
 print("✅ PDF generated")
+
+
+# ── Export data.json for dashboard ───────────────────────────────────────────
+import os as _os
+_os.makedirs("docs", exist_ok=True)
+dashboard_data = {
+    "date"             : datetime.now().strftime("%B %d, %Y"),
+    "moves_today"      : moves_today,
+    "top_3"            : top_3,
+    "contacts"         : contacts,
+    "dept_moves"       : dept_moves,
+    "competitive"      : competitive,
+    "vehicles"         : vehicles,
+    "sam"              : sam[:8],
+    "sources_sought"   : sources_sought,
+    "awards"           : awards,
+    "competitor_awards": competitor_awards,
+    "rss"              : rss
+}
+with open("docs/data.json", "w") as _f:
+    json.dump(dashboard_data, _f, indent=2, default=str)
+print("✅ docs/data.json written")
 
 # HubSpot CSV — SAM first, awards as fallback
 rows = []
