@@ -1,72 +1,329 @@
 {
-  "date": "March 10, 2026",
+  "date": "March 11, 2026",
   "moves_today": [
-    "Reach out to US EMBASSY SINGAPORE to discuss Event Planning Services for the Independence Day Celebration.",
-    "Contact DELTA DORE TECHNOLOGIES to discuss recent award of 9483876.74 for GEOSPATIAL SERVICES AND TECHNICAL SUPPORT.",
-    "Monitor recent award of 8590040.0 to CORELOGIC SOLUTIONS, LLC for CORELOGIC GEOSPATIAL SOFTWARE AND DATA SERVICES FOR PROPERTY STRUCTURE AND LOCATION INFORMATION, CRI."
+    "Reach out to Deloitte to explore potential opportunities on SEWP V.",
+    "Contact NASA to discuss possible collaborations on the DIU OTA.",
+    "Target the Army Futures Command OTA for upcoming projects."
   ],
   "top_3": [
-    "Pursue the Sources Sought for AI Model Hosting and Inference because it aligns with EDF's earth observation data capabilities.",
-    "Target the Sources Sought for AN/USC-28(V) Satellite Communication Sets (SCS) because it could utilize EDF's satellite imagery.",
-    "Flag the Sources Sought for TMC Program because it may require EDF's geospatial analysis services."
+    "Pursue the YCV-20 Maintenance and Repair opportunity for a chance to provide AI-generated analysis-ready earth observation data to the DEPT OF DEFENSE.DEPT OF THE NAVY.NAVSUP.NAVSUP GLOBAL LOGISTICS SUPPORT.NAVSUP FLC YOKOSUKA.NAVSUP FLT LOG CTR  YOKOSUKA.",
+    "Bid on the Facilities (FAC) Uniforms contract to supply uniforms to the STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.AMERICAN EMBASSY RANGOON.",
+    "Compete for the SUPPLY AND DELIVERY OF PASSENGER VEHICLE FOR U.S. EMBASSY APIA opportunity to provide passenger vehicles to the STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.US EMBASSY APIA."
   ],
   "contacts": [
-    "Contact DELTA DORE TECHNOLOGIES to discuss recent award of 9483876.74 for GEOSPATIAL SERVICES AND TECHNICAL SUPPORT.",
-    "Reach out to SCIENCE APPLICATIONS INTERNATIONAL CORPORATION to discuss recent award of 17641501.32 for THE DEPARTMENT OF THE INTERIOR (DOI) HAS PREPARED THIS DAY ONE USE CASE TO SUPPORT THE OFFICE OF THE."
+    "Reach out to Science Applications International Corporation to discuss potential collaborations on the DOI project.",
+    "Contact Spatial Front Inc to explore opportunities for geospatial services and technical support."
   ],
   "dept_moves": [
-    "The Navy and Marine Corps put amphibious readiness on the front burner, indicating a potential increase in demand for EDF's earth observation data.",
-    "The Pentagon and FAA agree to conduct anti-drone laser tests in New Mexico, suggesting a growing need for EDF's geospatial analysis services."
+    "The Pentagon and FAA agree to conduct anti-drone laser tests in New Mexico, potentially affecting EDF's satellite control antennas.",
+    "DoD and Anthropic now face legal and operational reckoning, which may impact EDF's business with the DoD."
   ],
   "competitive": [
-    "Maxar received 2298528.56 from DoD for HIGH RESOLUTION SATELLITE IMAGERY FOR SELECT AREAS OF INTEREST (AOI), highlighting the competitive landscape in satellite imagery.",
-    "Maxar received 1399933.0 from DoD for ASTRO-ROVER MAINTENANCE - OTD/TTU, emphasizing the need for EDF to stay competitive in the geospatial services market."
+    "Maxar received $2,298,528.56 from the DoD for high-resolution satellite imagery, making EDF's AI-generated analysis-ready earth observation data a competitive offering.",
+    "Maxar received $1,399,933.0 from the DoD for Astro-Rover maintenance, highlighting the need for EDF's expertise in satellite operations."
   ],
   "vehicles": [
-    "EDF can leverage the SEWP V contract vehicle to pursue the Sources Sought for AN/USC-28(V) Satellite Communication Sets (SCS).",
-    "EDF can use the DIU OTA contract vehicle to target the Sources Sought for TMC Program."
+    "Explore opportunities on SEWP V, a contract vehicle used by Deloitte, to provide AI-generated analysis-ready earth observation data.",
+    "Consider partnering with NASA on the DIU OTA, a contract vehicle used for research and development projects."
   ],
   "sam": [
     {
-      "noticeId": "fe613353fd1e4e04b9b9acf0b508f57c",
-      "title": "Event Planning Services for the Independence Day Celebration \u2013 U.S. Embassy Singapore",
-      "solicitationNumber": "19SN1026Q0016",
-      "fullParentPathName": "STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.US EMBASSY SINGAPORE",
-      "fullParentPathCode": "019.1900.19SN10",
-      "postedDate": "2026-03-10",
+      "noticeId": "ff962fc875b84d6ea7ed08abe4cdefd6",
+      "title": "YCV-20 Maintenance and Repair",
+      "solicitationNumber": "N6264926RA034",
+      "fullParentPathName": "DEPT OF DEFENSE.DEPT OF THE NAVY.NAVSUP.NAVSUP GLOBAL LOGISTICS SUPPORT.NAVSUP FLC YOKOSUKA.NAVSUP FLT LOG CTR  YOKOSUKA",
+      "fullParentPathCode": "017.1700.NAVSUP.NAVSUP GLS.NAVSUP FLC YOKOSUKA.N62649",
+      "postedDate": "2026-03-11",
       "type": "Presolicitation",
       "baseType": "Presolicitation",
-      "archiveType": "autocustom",
-      "archiveDate": "2026-07-15",
+      "archiveType": "auto15",
+      "archiveDate": "2026-04-09",
       "typeOfSetAsideDescription": null,
       "typeOfSetAside": null,
-      "responseDeadLine": "2026-04-15T16:30:00+08:00",
-      "naicsCode": "561920",
+      "responseDeadLine": "2026-03-25T10:00:00+09:00",
+      "naicsCode": "336611",
       "naicsCodes": [
-        "561920"
+        "336611"
       ],
-      "classificationCode": "R499",
+      "classificationCode": "J999",
       "active": "Yes",
       "award": null,
       "pointOfContact": [
         {
           "fax": "",
           "type": "primary",
-          "email": "SGProcurementRFQ@state.gov",
-          "phone": "",
+          "email": "josabeth.a.brizuela.civ@us.navy.mil",
+          "phone": "0081468165387",
           "title": null,
-          "fullName": "Kevin M. Phillips"
+          "fullName": "Josabeth Brizuela"
+        },
+        {
+          "fax": "0468257298",
+          "type": "secondary",
+          "email": "peterjommel.s.arrieta.ln@us.navy.mil",
+          "phone": "0081468166294",
+          "title": null,
+          "fullName": "Peter Arrieta"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=ff962fc875b84d6ea7ed08abe4cdefd6",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "96349-1500",
+        "city": "FPO",
+        "countryCode": "USA",
+        "state": "AP"
+      },
+      "placeOfPerformance": {
+        "city": {
+          "code": "Yokosuka",
+          "name": "Yokosuka"
+        },
+        "state": {
+          "code": "JP-14",
+          "name": "Kanagawa"
+        },
+        "country": {
+          "code": "JPN",
+          "name": "JAPAN"
+        }
+      },
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/ff962fc875b84d6ea7ed08abe4cdefd6/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=ff962fc875b84d6ea7ed08abe4cdefd6&limit=1"
+        }
+      ],
+      "resourceLinks": [
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0a03c4b56875467ba45ba4aa06dfa249/download"
+      ]
+    },
+    {
+      "noticeId": "fb761f1828fd49a8adf6ed9beee2f4cb",
+      "title": "58--PANEL,SONAR GTC",
+      "solicitationNumber": "N0010426QYA4D",
+      "fullParentPathName": "DEPT OF DEFENSE.DEPT OF THE NAVY.NAVSUP.NAVSUP WEAPON SYSTEMS SUPPORT.NAVSUP WSS MECHANICSBURG.NAVSUP WEAPON SYSTEMS SUPPORT MECH",
+      "fullParentPathCode": "017.1700.NAVSUP.NAVSUP WSS.NAVSUP WSS MECH.N00104",
+      "postedDate": "2026-03-11",
+      "type": "Solicitation",
+      "baseType": "Solicitation",
+      "archiveType": "auto15",
+      "archiveDate": "2026-04-21",
+      "typeOfSetAsideDescription": null,
+      "typeOfSetAside": "",
+      "responseDeadLine": "2026-04-06T16:30:00-04:00",
+      "naicsCode": "334290",
+      "naicsCodes": [
+        "334290"
+      ],
+      "classificationCode": "5845",
+      "active": "Yes",
+      "award": null,
+      "pointOfContact": [
+        {
+          "fax": null,
+          "type": "primary",
+          "email": "ALISON.N.BRUKER.CIV@US.NAVY.MIL",
+          "phone": null,
+          "title": null,
+          "fullName": "Telephone: 7176056447"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=fb761f1828fd49a8adf6ed9beee2f4cb",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "17050-0788",
+        "city": "MECHANICSBURG",
+        "countryCode": "USA",
+        "state": "PA"
+      },
+      "placeOfPerformance": null,
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/fb761f1828fd49a8adf6ed9beee2f4cb/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=fb761f1828fd49a8adf6ed9beee2f4cb&limit=1"
+        }
+      ],
+      "resourceLinks": null
+    },
+    {
+      "noticeId": "fb03d63cf0484ebaabd0a989f238fc43",
+      "title": "16--BRAKE,SEGMENTED ROT, IN REPAIR/MODIFICATION OF",
+      "solicitationNumber": "N0038325RF337",
+      "fullParentPathName": "DEPT OF DEFENSE.DEPT OF THE NAVY.NAVSUP.NAVSUP WEAPON SYSTEMS SUPPORT.NAVSUP WSS PHILADELPHIA.NAVSUP WEAPON SYSTEMS SUPPORT",
+      "fullParentPathCode": "017.1700.NAVSUP.NAVSUP WSS.NAVSUP WSS PHIL.N00383",
+      "postedDate": "2026-03-11",
+      "type": "Award Notice",
+      "baseType": "Award Notice",
+      "archiveType": "autocustom",
+      "archiveDate": "2026-03-25",
+      "typeOfSetAsideDescription": null,
+      "typeOfSetAside": "",
+      "responseDeadLine": "",
+      "naicsCode": null,
+      "naicsCodes": [],
+      "classificationCode": "1630",
+      "active": "Yes",
+      "award": {
+        "date": "2026-03-10",
+        "number": "N0038326FEX00",
+        "amount": "2547757",
+        "awardee": {
+          "name": "DERCO AEROSPACE, INC.",
+          "ueiSAM": "NE3YWSUB81N5",
+          "cageCode": "8X044"
+        }
+      },
+      "pointOfContact": [
+        {
+          "fax": null,
+          "type": "primary",
+          "email": "ALYSSA.T.THIEU.CIV@US.NAVY.MIL",
+          "phone": null,
+          "title": null,
+          "fullName": "ALYSSA T. THIEU, N731.45, PHONE (215)697-0169, EMAIL ALYSSA.T.THIEU.CIV@US.NAVY.MIL"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=fb03d63cf0484ebaabd0a989f238fc43",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "19111-5098",
+        "city": "PHILADELPHIA",
+        "countryCode": "USA",
+        "state": "PA"
+      },
+      "placeOfPerformance": null,
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/fb03d63cf0484ebaabd0a989f238fc43/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=fb03d63cf0484ebaabd0a989f238fc43&limit=1"
+        }
+      ],
+      "resourceLinks": null
+    },
+    {
+      "noticeId": "fa5b36b739ca4edf87556a90aa69805f",
+      "title": "Facilities (FAC) Uniforms",
+      "solicitationNumber": "19MB8026Q0008",
+      "fullParentPathName": "STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.AMERICAN EMBASSY RANGOON",
+      "fullParentPathCode": "019.1900.1931MR",
+      "postedDate": "2026-03-11",
+      "type": "Combined Synopsis/Solicitation",
+      "baseType": "Combined Synopsis/Solicitation",
+      "archiveType": "autocustom",
+      "archiveDate": "2026-03-24",
+      "typeOfSetAsideDescription": null,
+      "typeOfSetAside": null,
+      "responseDeadLine": "2026-03-23T17:00:00-04:00",
+      "naicsCode": "424350",
+      "naicsCodes": [
+        "424350"
+      ],
+      "classificationCode": "8415",
+      "active": "Yes",
+      "award": null,
+      "pointOfContact": [
+        {
+          "fax": "",
+          "type": "primary",
+          "email": "RangoonProcurement@state.gov",
+          "phone": "9517536509",
+          "title": null,
+          "fullName": "Rangoon Procurement"
+        },
+        {
+          "fax": null,
+          "type": "secondary",
+          "email": "rangoonproposals@state.gov",
+          "phone": "95 1 7536 509",
+          "title": null,
+          "fullName": "Rangoon Proposals "
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=fa5b36b739ca4edf87556a90aa69805f",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "96546",
+        "city": "APO",
+        "countryCode": "USA",
+        "state": "AP"
+      },
+      "placeOfPerformance": {
+        "city": {
+          "code": "50000",
+          "name": "Washington"
+        },
+        "state": {
+          "code": "DC",
+          "name": "District of Columbia"
+        },
+        "zip": "20520",
+        "country": {
+          "code": "USA",
+          "name": "UNITED STATES"
+        }
+      },
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/fa5b36b739ca4edf87556a90aa69805f/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=fa5b36b739ca4edf87556a90aa69805f&limit=1"
+        }
+      ],
+      "resourceLinks": [
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/db2993802da545a2836b7156b75d0a7e/download"
+      ]
+    },
+    {
+      "noticeId": "f9911e4757694fe1acf706f037d41a62",
+      "title": "Single Source Justification : Attorney service - Kuwait Buffer Zone Land Rights Registration",
+      "solicitationNumber": "19KU2026D0002",
+      "fullParentPathName": "STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.US EMBASSY KUWAIT",
+      "fullParentPathCode": "019.1900.19KU20",
+      "postedDate": "2026-03-11",
+      "type": "Justification",
+      "baseType": "Justification",
+      "archiveType": "auto30",
+      "archiveDate": "2026-04-10",
+      "typeOfSetAsideDescription": null,
+      "typeOfSetAside": null,
+      "responseDeadLine": null,
+      "naicsCode": "5411",
+      "naicsCodes": [
+        "5411"
+      ],
+      "classificationCode": "R418",
+      "active": "Yes",
+      "award": {
+        "date": "2026-02-12",
+        "number": "19KU2026D0002"
+      },
+      "pointOfContact": [
+        {
+          "fax": "",
+          "type": "primary",
+          "email": "kuwait_solicitation@state.gov",
+          "phone": "96522591214",
+          "title": null,
+          "fullName": "Maryam Sabri"
         },
         {
           "fax": "",
           "type": "secondary",
-          "email": "SGProcurementRFQ@state.gov",
-          "phone": "",
+          "email": "kuwait_solicitation@state.gov",
+          "phone": "96522591234",
           "title": null,
-          "fullName": "Grace Ng"
+          "fullName": "Zeyad Qishawi "
         }
       ],
-      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=fe613353fd1e4e04b9b9acf0b508f57c",
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=f9911e4757694fe1acf706f037d41a62",
       "organizationType": "OFFICE",
       "officeAddress": {
         "zipcode": "20520",
@@ -76,77 +333,275 @@
       },
       "placeOfPerformance": {
         "city": {
-          "code": "Singapore",
-          "name": "Singapore"
+          "code": "Bayan",
+          "name": "Bayan"
         },
         "state": {
-          "code": "SG-01",
-          "name": "Central Singapore"
+          "code": "KW-HA",
+          "name": "\u1e28awall\u012b"
         },
         "country": {
-          "code": "SGP",
-          "name": "SINGAPORE"
+          "code": "KWT",
+          "name": "KUWAIT"
         }
       },
       "additionalInfoLink": null,
-      "uiLink": "https://sam.gov/workspace/contract/opp/fe613353fd1e4e04b9b9acf0b508f57c/view",
+      "uiLink": "https://sam.gov/workspace/contract/opp/f9911e4757694fe1acf706f037d41a62/view",
       "links": [
         {
           "rel": "self",
-          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=fe613353fd1e4e04b9b9acf0b508f57c&limit=1"
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=f9911e4757694fe1acf706f037d41a62&limit=1"
+        }
+      ],
+      "resourceLinks": [
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d8fd6f4cbdfb485bae3e5f09d39ae922/download"
+      ]
+    },
+    {
+      "noticeId": "f8adf31d9a894dcdac49ea8d91331e3a",
+      "title": "SUPPLY AND DELIVERY OF PASSENGER VEHICLE FOR U.S. EMBASSY APIA",
+      "solicitationNumber": "19WS1026Q0364",
+      "fullParentPathName": "STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.US EMBASSY APIA",
+      "fullParentPathCode": "019.1900.19WS10",
+      "postedDate": "2026-03-11",
+      "type": "Presolicitation",
+      "baseType": "Presolicitation",
+      "archiveType": "autocustom",
+      "archiveDate": "2026-09-01",
+      "typeOfSetAsideDescription": "No Set aside used",
+      "typeOfSetAside": "NONE",
+      "responseDeadLine": null,
+      "naicsCode": "3361",
+      "naicsCodes": [
+        "3361"
+      ],
+      "classificationCode": "2310",
+      "active": "Yes",
+      "award": null,
+      "pointOfContact": [
+        {
+          "fax": "",
+          "type": "primary",
+          "email": "MRSSProcurement@state.gov",
+          "phone": "63253012000",
+          "title": null,
+          "fullName": "ANDREW K. DANTO"
+        },
+        {
+          "fax": "",
+          "type": "secondary",
+          "email": "MRSSProcurement@state.gov",
+          "phone": "63253012000",
+          "title": null,
+          "fullName": "MRSS Procurement"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=f8adf31d9a894dcdac49ea8d91331e3a",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "20520",
+        "city": "WASHINGTON",
+        "countryCode": "USA",
+        "state": "DC"
+      },
+      "placeOfPerformance": {
+        "country": {
+          "code": "WSM",
+          "name": "SAMOA"
+        }
+      },
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/f8adf31d9a894dcdac49ea8d91331e3a/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=f8adf31d9a894dcdac49ea8d91331e3a&limit=1"
         }
       ],
       "resourceLinks": null
+    },
+    {
+      "noticeId": "f8670aa97732425884f294086df56814",
+      "title": "TUBING BUNDLES FOR HEAT EXCHANGE",
+      "solicitationNumber": "15B21626Q00000002",
+      "fullParentPathName": "JUSTICE, DEPARTMENT OF.FEDERAL PRISON SYSTEM / BUREAU OF PRISONS.FCI ELKTON",
+      "fullParentPathCode": "015.1540.15B216",
+      "postedDate": "2026-03-11",
+      "type": "Combined Synopsis/Solicitation",
+      "baseType": "Combined Synopsis/Solicitation",
+      "archiveType": "auto15",
+      "archiveDate": "2026-04-02",
+      "typeOfSetAsideDescription": "Total Small Business Set-Aside (FAR 19.5)",
+      "typeOfSetAside": "SBA",
+      "responseDeadLine": "2026-03-18T10:00:00-04:00",
+      "naicsCode": "333414",
+      "naicsCodes": [
+        "333414"
+      ],
+      "classificationCode": "4520",
+      "active": "Yes",
+      "award": null,
+      "pointOfContact": [
+        {
+          "fax": "",
+          "type": "primary",
+          "email": "zbowers@bop.gov",
+          "phone": "3304206460",
+          "title": null,
+          "fullName": "Zach Bowers"
+        },
+        {
+          "fax": "",
+          "type": "secondary",
+          "email": "lkress@bop.gov",
+          "phone": "3304206234",
+          "title": null,
+          "fullName": "Logan Kress"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=f8670aa97732425884f294086df56814",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "44415",
+        "city": "ELKTON",
+        "countryCode": "USA",
+        "state": "OH"
+      },
+      "placeOfPerformance": {
+        "city": {
+          "code": "44030",
+          "name": "Lisbon"
+        },
+        "state": {
+          "code": "OH",
+          "name": "Ohio"
+        },
+        "zip": "44432",
+        "country": {
+          "code": "USA",
+          "name": "UNITED STATES"
+        }
+      },
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/f8670aa97732425884f294086df56814/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=f8670aa97732425884f294086df56814&limit=1"
+        }
+      ],
+      "resourceLinks": [
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1c493456137e4333bebd83a820d6569c/download",
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2875f40f7a3542b98afc7a4c2266c783/download",
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3ebfad98463c4f01b747977e148063eb/download",
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/886bccdeb0764b45bf3959345f0a81b3/download"
+      ]
+    },
+    {
+      "noticeId": "f77d668261754c3cbbd2d30bdba34b42",
+      "title": "DSC NPS Non-Personal Service for Administrative As",
+      "solicitationNumber": "140P2026Q0001",
+      "fullParentPathName": "INTERIOR, DEPARTMENT OF THE.NATIONAL PARK SERVICE.DSC CONTRACTING SERVICES DIVISION",
+      "fullParentPathCode": "014.1443.140P20",
+      "postedDate": "2026-03-11",
+      "type": "Solicitation",
+      "baseType": "Solicitation",
+      "archiveType": "auto15",
+      "archiveDate": "2026-04-04",
+      "typeOfSetAsideDescription": "Total Small Business Set-Aside (FAR 19.5)",
+      "typeOfSetAside": "SBA",
+      "responseDeadLine": "2026-03-20T12:00:00-04:00",
+      "naicsCode": "561110",
+      "naicsCodes": [
+        "561110"
+      ],
+      "classificationCode": "R699",
+      "active": "Yes",
+      "award": null,
+      "pointOfContact": [
+        {
+          "fax": null,
+          "type": "primary",
+          "email": "amy_solomon@nps.gov",
+          "phone": "0000000000",
+          "title": null,
+          "fullName": "Solomon, Amy"
+        }
+      ],
+      "description": "https://api.sam.gov/prod/opportunities/v1/noticedesc?noticeid=f77d668261754c3cbbd2d30bdba34b42",
+      "organizationType": "OFFICE",
+      "officeAddress": {
+        "zipcode": "80225",
+        "city": "Denver",
+        "countryCode": "USA",
+        "state": "CO"
+      },
+      "placeOfPerformance": {
+        "city": {},
+        "state": {},
+        "country": {}
+      },
+      "additionalInfoLink": null,
+      "uiLink": "https://sam.gov/workspace/contract/opp/f77d668261754c3cbbd2d30bdba34b42/view",
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://api.sam.gov/prod/opportunities/v2/search?noticeid=f77d668261754c3cbbd2d30bdba34b42&limit=1"
+        }
+      ],
+      "resourceLinks": [
+        "https://sam.gov/api/prod/opps/v3/opportunities/resources/files/283a719829204852afea2ba9fe4a2525/download"
+      ]
     }
   ],
   "sources_sought": [
     {
-      "title": "AI Model Hosting and Inference",
-      "agency": "COMMERCE, DEPARTMENT OF.NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY.DEPT OF COMMERCE NIST",
+      "title": "29 - Metering Fuel Pump",
+      "agency": "DEPT OF DEFENSE.DEFENSE LOGISTICS AGENCY.DLA MARITIME.DLA MARITIME MECHANICSBURG.SPRMM1 DLA MECHANICSBURG",
       "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
-      "response_due": "2026-03-16T12:00:00-04:00",
-      "link": "https://sam.gov/workspace/contract/opp/fd17041e54ff4c2ea2cf638937a94ccb/view"
+      "posted": "2026-03-11",
+      "response_due": "2026-03-23T12:00:00-04:00",
+      "link": "https://sam.gov/workspace/contract/opp/fb85f8f1af6a47f6899822ab44cf0421/view"
+    },
+    {
+      "title": "Baler",
+      "agency": "DEPT OF DEFENSE.DEPT OF THE AIR FORCE.U.S. AIR FORCES IN EUROPE.FA5570  501 CSW RCO",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-11",
+      "response_due": "2026-03-20T14:00:00+00:00",
+      "link": "https://sam.gov/workspace/contract/opp/e1fd220bcda74443b84391c4b4fc1c01/view"
+    },
+    {
+      "title": "SOURCES SOUGHT NOTICE ONLY: 24/7 Unarmed Security Guard services with patrol vehicle at the National Memorial Cemetery of Arizona . \n -- S206",
+      "agency": "VETERANS AFFAIRS, DEPARTMENT OF.VETERANS AFFAIRS, DEPARTMENT OF.NATIONAL CEMETERY ADMIN (36C786)",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-11",
+      "response_due": "2026-03-18",
+      "link": "https://sam.gov/workspace/contract/opp/d0bcc873843a42639e28b455fa43952a/view"
     },
     {
       "title": "AN/USC-28(V) Satellite Communication Sets (SCS)",
       "agency": "DEPT OF DEFENSE.DEPT OF THE ARMY.AMC.ACC.ACC-CTRS.ACC-APG.W6QK ACC-APG",
       "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
+      "posted": "2026-03-11",
       "response_due": "2026-03-19T10:00:00-04:00",
-      "link": "https://sam.gov/workspace/contract/opp/fd0fc75d0e5b4ff486b0d6a37e4f53cb/view"
-    },
-    {
-      "title": "Freeze Dried Plasma (FDP) Emergency Use Authorization or FDA Licensed Product",
-      "agency": "DEPT OF DEFENSE.DEFENSE HEALTH AGENCY (DHA).DEFENSE HEALTH AGENCY",
-      "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
-      "response_due": "2026-03-25T12:15:00-04:00",
-      "link": "https://sam.gov/workspace/contract/opp/ed19ca96864644109ee2c0d77f1ed018/view"
-    },
-    {
-      "title": "Request for Information (RFI) Repair of the F-15 APG-82(V)1",
-      "agency": "DEPT OF DEFENSE.DEPT OF THE AIR FORCE.AIR FORCE MATERIEL COMMAND.AIR FORCE SUSTAINMENT CENTER.FA8538  AFSC PZAAB",
-      "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
-      "response_due": "2026-03-24T17:00:00-04:00",
-      "link": "https://sam.gov/workspace/contract/opp/eabf49968ca2416ca272f3cf64d12e47/view"
-    },
-    {
-      "title": "TMC Program",
-      "agency": "DEPT OF DEFENSE.DEPT OF THE ARMY.AMC.ACC.ACC-OO.409TH CSB.0409 AQ HQ     CONTRACT",
-      "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
-      "response_due": "2026-03-16T13:00:00+01:00",
-      "link": "https://sam.gov/workspace/contract/opp/87ae333f74ef4b2880632e2513ae2a94/view"
+      "link": "https://sam.gov/workspace/contract/opp/ceab23e7c3bc460baad4f18c95fb03f6/view"
     },
     {
       "title": "VEHICLE LEASE - KINGDOM OF SAUDI ARABIA (KSA)",
       "agency": "DEPT OF DEFENSE.DEPT OF THE ARMY.US ARMY CORPS OF ENGINEERS.ENGINEER DIVISION SOUTHWESTERN.W076 ENDIST MIDDLE EAS(PROVIS)",
       "notice_type": "Sources Sought",
-      "posted": "2026-03-10",
+      "posted": "2026-03-11",
       "response_due": "2026-03-26T12:00:00-04:00",
-      "link": "https://sam.gov/workspace/contract/opp/83468902d0f145caae0dfe9fb9150781/view"
+      "link": "https://sam.gov/workspace/contract/opp/c2ee83ed26484a87b8a9926176861e66/view"
+    },
+    {
+      "title": "Sources Sought 1 NSN LTC CL25342001",
+      "agency": "DEPT OF DEFENSE.DEFENSE LOGISTICS AGENCY.DLA LAND.DLA LAND COLUMBUS.DLA LAND AND MARITIME",
+      "notice_type": "Sources Sought",
+      "posted": "2026-03-11",
+      "response_due": "2026-03-17T17:00:00-04:00",
+      "link": "https://sam.gov/workspace/contract/opp/bce169e34cef42e297406daaa488f271/view"
     }
   ],
   "awards": [
@@ -181,6 +636,12 @@
       "agency": null
     },
     {
+      "description": "NM_SOUTHERNRGRIFT_MAG_RAD_D26",
+      "recipient_name": "NV5 GEOSPATIAL, INC.",
+      "amount": 3341835.32,
+      "agency": null
+    },
+    {
       "description": "AK_GLACIERTONGASSLANDSLIDES_D23",
       "recipient_name": "NV5 GEOSPATIAL, INC.",
       "amount": 2672614.88,
@@ -190,12 +651,6 @@
       "description": "MOBILE GEOGRAPHIC INFORMATION SYSTEM (GIS) TECHNICAL FIELD SUPPORT SERVICES, TRAINING, AND DEVELOPER",
       "recipient_name": "NV5 GEOSPATIAL, INC.",
       "amount": 1917283.88,
-      "agency": null
-    },
-    {
-      "description": "US ARMY CORPS OF ENGINEERS (USACE) CIVIL WORKS BUSINESS INTELLIGENCE (CWBI) CLOUD HOSTING SERVICES AND THE INSTALLATION GEOSPATIAL PLATFORM.",
-      "recipient_name": "TRACE3 GOVERNMENT, LLC",
-      "amount": 1827641.8,
       "agency": null
     }
   ],
@@ -217,48 +672,48 @@
   ],
   "rss": [
     {
-      "title": "Navy, Marine Corps amphibious readiness board launches as services put issue on \u2018front burner\u2019",
-      "link": "https://breakingdefense.com/2026/03/navy-marine-corps-amphibious-readiness-board-launches-as-services-put-issue-on-front-burner/",
+      "title": "Special ops leader Rudd confirmed to helm CYBERCOM and NSA",
+      "link": "https://breakingdefense.com/2026/03/special-ops-leader-rudd-confirmed-to-helm-cybercom-and-nsa/",
       "source": "Breaking Defense"
     },
     {
-      "title": "On the flightline with Swedish fighter jets in Iceland, in Cold War 2.0",
-      "link": "https://breakingdefense.com/2026/03/on-the-flightline-with-swedish-fighter-jets-in-iceland-in-cold-war-2-0/",
+      "title": "The latest in Iran and an update in the Anthropic saga",
+      "link": "https://breakingdefense.com/2026/03/the-latest-in-iran-and-an-update-in-the-anthropic-saga/",
       "source": "Breaking Defense"
     },
     {
-      "title": "Modernizing defense enterprise IT without disrupting the mission",
-      "link": "https://breakingdefense.com/2026/03/modernizing-defense-enterprise-it-without-disrupting-the-mission/",
+      "title": "Robinson Helicopter launches unmanned division, envisions next-gen helo drones",
+      "link": "https://breakingdefense.com/2026/03/robinson-helicopter-launches-unmanned-division-envisions-next-gen-helo-drones/",
       "source": "Breaking Defense"
     },
     {
-      "title": "Landspace tests 220-ton methane engine for future heavy-lift launchers",
-      "link": "https://spacenews.com/landspace-tests-220-ton-methane-engine-for-future-heavy-lift-launchers/",
+      "title": "Space Force officially terminates AeroVironment contract for satellite control antennas",
+      "link": "https://spacenews.com/space-force-officially-terminates-aerovironment-contract-for-satellite-control-antennas/",
       "source": "Space News"
     },
     {
-      "title": "Meridian Space Diplomacy Forum & Executive Space Training \u2013 March 25 & 26",
-      "link": "https://spacenews.com/meridian-space-diplomacy-forum-executive-space-training-march-25-26/",
+      "title": "Telesat expands Canadian landing station footprint for Lightspeed",
+      "link": "https://spacenews.com/telesat-expands-canadian-landing-station-footprint-for-lightspeed/",
       "source": "Space News"
     },
     {
-      "title": "SSTL to build spacecraft for private space telescope",
-      "link": "https://spacenews.com/sstl-to-build-spacecraft-for-private-space-telescope/",
+      "title": "Large Series C signals scale-up of China\u2019s laser satellite communications sector",
+      "link": "https://spacenews.com/large-series-c-signals-scale-up-of-chinas-laser-satellite-communications-sector/",
       "source": "Space News"
     },
     {
-      "title": "Lawmakers question DoD\u2019s growing use of equity investments to strengthen DIB",
-      "link": "https://federalnewsnetwork.com/congress/2026/03/lawmakers-question-dods-growing-use-of-equity-investments-to-strengthen-dib/",
+      "title": "DoD, Anthropic now face legal, operational reckoning",
+      "link": "https://federalnewsnetwork.com/litigation/2026/03/dod-anthropic-now-face-legal-operational-reckoning/",
       "source": "Federal News Network"
     },
     {
-      "title": "After deep staffing cuts, agencies seek mix of hiring and AI tools to rebuild capacity",
-      "link": "https://federalnewsnetwork.com/workforce/2026/03/after-deep-staffing-cuts-agencies-seek-mix-of-hiring-and-ai-tools-to-rebuild-capacity/",
+      "title": "What does the IRS do if someone is kidnapped and not able to pay taxes?",
+      "link": "https://federalnewsnetwork.com/agency-oversight/2026/03/what-does-the-irs-do-if-someone-is-kidnapped-and-not-able-to-pay-taxes/",
       "source": "Federal News Network"
     },
     {
-      "title": "AI company Anthropic sues Trump administration seeking to undo \u2018supply chain risk\u2019 designation",
-      "link": "https://federalnewsnetwork.com/artificial-intelligence/2026/03/anthropic-sues-trump-administration-seeking-to-undo-supply-chain-risk-designation/",
+      "title": "IRS phase-out of paper checks leaves some taxpayers waiting months for refunds",
+      "link": "https://federalnewsnetwork.com/management/2026/03/irs-phase-out-of-paper-checks-leaves-some-taxpayers-waiting-months-for-refunds/",
       "source": "Federal News Network"
     },
     {
@@ -277,18 +732,18 @@
       "source": "C4ISRNET"
     },
     {
-      "title": "Anthropic sues DOD, Hegseth, and a dozen other federal agencies",
-      "link": "https://www.defenseone.com/business/2026/03/anthropic-sues-over-dozen-federal-agencies-and-government-leaders/411997/",
+      "title": "INDOPACOM was all in on Anthropic. Now it\u2019s working to adjust",
+      "link": "https://www.defenseone.com/policy/2026/03/indopacom-was-all-anthropic-now-its-working-adjust/412033/",
       "source": "Defense One"
     },
     {
-      "title": "Hegseth presses Defense civilians to deploy for immigration enforcement",
-      "link": "https://www.defenseone.com/policy/2026/03/hegseth-ramps-pressure-defense-civilians-deploy-immigration-enforcement/411998/",
+      "title": "A year into Hegseth\u2019s cuts, defense civilians report \u2018degraded performance\u2019 and low morale",
+      "link": "https://www.defenseone.com/policy/2026/03/year-hegseths-cuts-defense-civilians-report-degraded-performance-and-low-morale/412006/",
       "source": "Defense One"
     },
     {
-      "title": "The D Brief: US toll rises to 8; Iran\u2019s new leader; Building military-specific AI; Counting the rationales for war; And a bit more.",
-      "link": "https://www.defenseone.com/threats/2026/03/the-d-brief-march-09-2026/411979/",
+      "title": "The D Brief: More mixed messaging on war; Airstrike pricetag; DOD civs pressed to seek border duty; Anthropic sues Hegseth; And a bit more.",
+      "link": "https://www.defenseone.com/threats/2026/03/the-d-brief-march-10-2026/412009/",
       "source": "Defense One"
     }
   ]
